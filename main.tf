@@ -1,11 +1,3 @@
-/*module "provider" {
-  # Configure the AWS Provider
-  source       = "modules/provider"
-  access_key   = "${var.aws_access_key}"
-  secret_key   = "${var.aws_secret_key}"
-  region       = "${var.region}"
-}*/
-
 provider "aws" {
   access_key = "${var.aws_access_key}"
   secret_key = "${var.aws_secret_key}"
@@ -61,11 +53,18 @@ module "private-db-subnet" {
   env = "${var.env}"
 }
 
-/*module "public-route-table" {
+/*module "IGW" {
+  # Configure IGW
+  source = "modules/network/igw/"
+  vpc_id = "${module.core-network-vpc.id}"
+  env = "${var.env}"
+  create_vpc = "${var.create_vpc}"
+}*/
+
+module "public-route-table" {
   # Configure Public Route Table
   source = "modules/network/routetable/"
   name = "core-network-frontend-routetable"
   vpc_id = "${module.core-network-vpc.id}"
-
-
-}*/
+  env = "${var.env}"
+}
