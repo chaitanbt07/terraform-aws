@@ -25,7 +25,7 @@ module "core-network-dhcp" {
 
 module "public-frontend-subnet" {
   # Configure public subnet 
-  source = "modules/network/"
+  source = "modules/network/subnet/"
   name = "core-network-vpc-publicsubnet"
   vpc_id = "${module.core-network-vpc.id}"
   cidr_block = "${var.public-frontend-subnet}"
@@ -35,7 +35,7 @@ module "public-frontend-subnet" {
 
 module "private-app-subnet" {
   # Configure public subnet 
-  source = "modules/network/"
+  source = "modules/network/subnet/"
   name = "core-network-vpc-app-privatesubnet"
   vpc_id = "${module.core-network-vpc.id}"
   cidr_block = "${var.private-app-subnet}"
@@ -45,7 +45,7 @@ module "private-app-subnet" {
 
 module "private-db-subnet" {
   # Configure public subnet 
-  source = "modules/network/"
+  source = "modules/network/subnet/"
   name = "core-network-vpc-db-privatesubnet"
   vpc_id = "${module.core-network-vpc.id}"
   cidr_block = "${var.private-db-subnet}"
@@ -67,4 +67,5 @@ module "public-route-table" {
   name = "core-network-frontend-routetable"
   vpc_id = "${module.core-network-vpc.id}"
   env = "${var.env}"
+  create_vpc = "${var.create_vpc}"
 }
