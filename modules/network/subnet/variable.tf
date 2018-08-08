@@ -2,9 +2,7 @@ variable "name" {
     default = ""
 }
 
-variable "vpc_id" {
-    type = "list"
-}
+variable "vpc_id" {}
 
 variable "cidr_block" {
     default = ""
