@@ -3,5 +3,5 @@ output "rtid" {
 }
 
 output "rtassociatonid" {
-    value = "${element(concat(aws_route_table_association.rtassociaton.id, list("")), 0)}"
+    value = ["${element(concat(aws_route_table_association.rtassociaton.id, list("")), 0)}"]
 }
