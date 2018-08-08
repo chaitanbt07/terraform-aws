@@ -14,6 +14,6 @@ resource "aws_vpc_dhcp_options" "dhcpoptionset" {
 
 resource "aws_vpc_dhcp_options_association" "dns_resolver" {
   count = "${var.create_vpc && var.enable_dhcp_options ? 1 : 0}"
-  vpc_id          = "${var.vpc_id[count.index]}"
+  vpc_id          = "${var.vpc_id}"
   dhcp_options_id = "${aws_vpc_dhcp_options.dhcpoptionset.id}"
 }
