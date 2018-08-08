@@ -7,6 +7,6 @@ variable "secret_key" {
 }
 
 variable "region" {
-    default = "ap-southeast-2"
+    default = "2"
 }
 
