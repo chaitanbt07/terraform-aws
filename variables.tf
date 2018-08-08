@@ -28,6 +28,7 @@ variable "create_vpc" {
     default = false
 }
 
+
 variable "enable_dhcp_options" {
     default = true
 }*/
