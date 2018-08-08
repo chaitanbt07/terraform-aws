@@ -1,7 +1,7 @@
 output "rtid" {
-    value = "${aws_route_table.rt.*.id}"
+    value = "${element(concat(aws_route_table.rt.*.id, list("")), 0)}"
 }
 
 output "rtassociatonid" {
-    value = "${aws_route_table_association.rtassociaton.id}"
+    value = "${element(concat(aws_route_table_association.rtassociaton.id, list("")), 0)}"
 }
