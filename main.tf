@@ -77,5 +77,5 @@ module "public-route" {
   route_table_id = "${module.public-route-table.rtid}"
   destination_cidr_block = "0.0.0.0/0"
   gateway_id = "${module.igw.igwid}"
-  nat_gateway_id =
+  nat_gateway_id = []
 }
