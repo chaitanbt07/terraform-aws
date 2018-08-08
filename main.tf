@@ -67,5 +67,7 @@ module "public-route-table" {
   name = "core-network-frontend-routetable"
   vpc_id = "${module.core-network-vpc.id}"
   env = "${var.env}"
+  type = "public" # public or private
   create_vpc = "${var.create_vpc}"
+  subnet_id = "${module.public-frontend-subnet.subnetid}"
 }
