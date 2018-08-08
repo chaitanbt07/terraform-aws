@@ -1,27 +1,27 @@
 output "id" {
-    value = "${aws_vpc.core-network.*.id}"
+    value = "${element(concat(aws_vpc.core-network.*.id, list("")), 0)}"
 }
 
 output "vpcarn" {
-    value = "${aws_vpc.core-network.*.arn}"
+    value = "${element(concat(aws_vpc.core-network.*.arn, list("")), 0)}"
 }
 
 output "vpc-cidr" {
-    value = "${aws_vpc.core-network.*.cidr_block}"
+    value = "${element(concat(aws_vpc.core-network.*.cidr_block, list("")), 0)}"
 }
 
 output "main-rt" {
-    value = "${aws_vpc.core-network.*.main_route_table_id}"
+    value = "${element(concat(aws_vpc.core-network.*.main_route_table_id, list("")), 0)}"
 }
 
 output "default-nacl" {
-    value = "${aws_vpc.core-network.*.default_network_acl_id}"
+    value = "${element(concat(aws_vpc.core-network.*.default_network_acl_id, list("")), 0)}"
 }
 
 output "default-sg" {
-    value = "${aws_vpc.core-network.*.default_security_group_id}"
+    value = "${element(concat(aws_vpc.core-network.*.default_security_group_id, list("")), 0)}"
 }
 
 output "default-rt" {
-    value = "${aws_vpc.core-network.*.default_route_table_id}"
+    value = "${element(concat(aws_vpc.core-network.*.default_route_table_id, list("")), 0)}"
 }
