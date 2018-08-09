@@ -15,8 +15,12 @@ resource "aws_nat_gateway" "ngw" {
   }
 }
 
+locals {
+    route_count = "${length(var.route_table_id)}"
+}
+
 resource "aws_route" "ngwroute" {
-    count = "${var.create_vpc ? length(var.route_table_id) : 0}"
+    count = "${var.create_vpc && (local.route_count > 0) ? local.route_count : 0}"
     route_table_id = "${var.route_table_id[count.index]}" # Private route table id
     destination_cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_nat_gateway.ngw.id}"
