@@ -12,5 +12,5 @@ resource "aws_route" "igwroute" {
     route_table_id = "${var.route_table_id}"
     destination_cidr_block = "${var.destination_cidr_block}"
     gateway_id = "${aws_internet_gateway.igw.id}"
-    depends_on = "${aws_internet_gateway.igw}"
+    depends_on = ["aws_internet_gateway.igw"]
 }
