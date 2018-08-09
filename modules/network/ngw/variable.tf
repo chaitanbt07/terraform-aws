@@ -11,3 +11,5 @@ variable "route_table_id" {
     description = "The Private route table"
     default = ""
 }
+
+variable "create_vpc" {}

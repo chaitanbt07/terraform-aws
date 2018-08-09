@@ -98,6 +98,7 @@ module "ngw" {
   source = "modules/network/ngw/"
   internet_gateway = "${module.igw.igwid}"
   env = "${var.env}"
+  create_vpc = "${var.create_vpc}"
   subnet_id = "${module.public-frontend-subnet.subnetid}"
   route_table_id = ["${module.app-private-route-table.rtid}", "${module.db-private-route-table.rtid}"]
 }
