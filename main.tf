@@ -64,6 +64,26 @@ module "public-route-table" {
   subnet_id = "${module.public-frontend-subnet.subnetid}"
 }
 
+module "app-private-route-table" {
+  source = "modules/network/routetable/"
+  name = "core-network-app-routetable"
+  vpc_id = "${module.core-network-vpc.id}"
+  env = "${var.env}"
+  type = "app-private"
+  create_vpc = "${var.create_vpc}"
+  subnet_id = "${module.private-app-subnet.subnetid}"
+}
+
+module "db-private-route-table" {
+  source = "modules/network/routetable/"
+  name = "core-network-db-routetable"
+  vpc_id = "${module.core-network-vpc.id}"
+  env = "${var.env}"
+  type = "db-private"
+  create_vpc = "${var.create_vpc}"
+  subnet_id = "${module.private-db-subnet.subnetid}"
+}
+
 module "igw" {
   # Configure IGW
   source = "modules/network/igw/"
@@ -72,6 +92,14 @@ module "igw" {
   create_vpc = "${var.create_vpc}"
   route_table_id = "${module.public-route-table.rtid}"
   destination_cidr_block = "0.0.0.0/0"
+}
+
+module "ngw" {
+  source = "modules/network/ngw/"
+  internet_gateway = "${module.igw.igwid}"
+  env = "${var.env}"
+  subnet_id = "${module.public-frontend-subnet.subnetid}"
+  route_table_id = ["${module.app-private-route-table.rtid}", "${module.db-private-route-table.rtid}"]
 }
 
 /*module "common-route" {
