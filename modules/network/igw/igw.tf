@@ -1,5 +1,5 @@
 resource "aws_internet_gateway" "igw" {
-  count = "${var.create_vpc ? 1 : 0}"
+  count = "${var.create_vpc && var.igw_route ? 1 : 0}"
   vpc_id = "${var.vpc_id}"
 
   tags {
@@ -9,8 +9,8 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_route" "igwroute" {
+    count = "${var.create_vpc && var.igw_route ? 1 : 0}"
     route_table_id = "${var.route_table_id}"
     destination_cidr_block = "${var.destination_cidr_block}"
-    gateway_id = "${aws_internet_gateway.igw.id}"
-    depends_on = ["aws_internet_gateway.igw"]
+    gateway_id = "${element(concat(aws_internet_gateway.igw.*.id, list("")), 0)}"
 }

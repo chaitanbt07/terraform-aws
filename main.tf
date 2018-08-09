@@ -89,22 +89,36 @@ module "igw" {
   source = "modules/network/igw/"
   vpc_id = "${module.core-network-vpc.id}"
   env = "${var.env}"
+  igw_route = true
   create_vpc = "${var.create_vpc}"
   route_table_id = "${module.public-route-table.rtid}"
   destination_cidr_block = "0.0.0.0/0"
+}
+
+module "ngweip" {
+  source = "modules/network/eip/"
+  create_vpc = "${var.create_vpc}"
+  nat_gw_count = true
+  eip = true
+  env = "natgw"
 }
 
 module "ngw" {
   source = "modules/network/ngw/"
-  internet_gateway = "${module.igw.igwid}"
+  nat_gateway_route = true
   env = "${var.env}"
   create_vpc = "${var.create_vpc}"
   subnet_id = "${module.public-frontend-subnet.subnetid}"
-  route_table_id = ["${module.app-private-route-table.rtid}", "${module.db-private-route-table.rtid}"]
+  allocation_id = "${module.ngweip.eipalloc}"
+  #route_table_id = ["${module.app-private-route-table.rtid}", "${module.db-private-route-table.rtid}"]
 }
 
-/*module "common-route" {
+module "nat-gateway-route" {
   source = "modules/network/routes/"
-  route_table_id = "${module.public-route-table.rtid}"
+  route_table_id = "${module.app-private-route-table.rtid}"
   destination_cidr_block = "0.0.0.0/0"
-}*/
+  create_vpc = "${var.create_vpc}"
+  gateway_route = false
+  nat_gateway_route = true
+  nat_gateway_id = "${module.ngw.ngw}"
+}

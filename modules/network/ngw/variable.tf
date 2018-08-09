@@ -1,5 +1,3 @@
-variable "internet_gateway" {}
-
 variable "env" {}
 
 variable "subnet_id" {
@@ -7,9 +5,10 @@ variable "subnet_id" {
     default = ""
 }
 
-variable "route_table_id" {
-    description = "The Private route table"
-    type = "list"
-}
-
 variable "create_vpc" {}
+
+variable "allocation_id" {}
+
+variable "nat_gateway_route" {
+    default = "false"
+}
