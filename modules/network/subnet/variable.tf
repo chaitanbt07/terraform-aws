@@ -1,18 +1,17 @@
 variable "name" {
-    default = ""
+  default = ""
 }
 
 variable "vpc_id" {}
 
 variable "cidr_block" {
-    default = ""
+  default = ""
 }
 
 variable "env" {
-    default = ""
+  default = ""
 }
 
 variable "create_vpc" {
-    default = ""
+  default = ""
 }
-

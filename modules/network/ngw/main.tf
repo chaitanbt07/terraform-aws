@@ -8,9 +8,9 @@
 }*/
 
 resource "aws_nat_gateway" "ngw" {
-  count = "${var.create_vpc ? 1 : 0}"
+  count         = "${var.create_vpc ? 1 : 0}"
   allocation_id = "${var.allocation_id}"
-  subnet_id     = "${var.subnet_id}" # Public subnet id
+  subnet_id     = "${var.subnet_id}"          # Public subnet id
 
   tags {
     Name = "${var.env}-ngw"
@@ -24,3 +24,4 @@ resource "aws_nat_gateway" "ngw" {
     gateway_id = "${aws_nat_gateway.ngw.*.id, count.index}"
     depends_on = ["aws_nat_gateway.ngw"]
 }*/
+

@@ -4,9 +4,9 @@ variable "env" {}
 variable "create_vpc" {}
 
 variable "type" {
-    default = ""
+  default = ""
 }
 
 variable "subnet_id" {
-    default = ""
+  default = ""
 }
