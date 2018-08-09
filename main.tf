@@ -53,14 +53,6 @@ module "private-db-subnet" {
   env = "${var.env}"
 }
 
-module "igw" {
-  # Configure IGW
-  source = "modules/network/igw/"
-  vpc_id = "${module.core-network-vpc.id}"
-  env = "${var.env}"
-  create_vpc = "${var.create_vpc}"
-}
-
 module "public-route-table" {
   # Configure Public Route Table
   source = "modules/network/routetable/"
@@ -72,10 +64,18 @@ module "public-route-table" {
   subnet_id = "${module.public-frontend-subnet.subnetid}"
 }
 
-module "public-route" {
+module "igw" {
+  # Configure IGW
+  source = "modules/network/igw/"
+  vpc_id = "${module.core-network-vpc.id}"
+  env = "${var.env}"
+  create_vpc = "${var.create_vpc}"
+  route_table_id = "${module.public-route-table.rtid}"
+  destination_cidr_block = "0.0.0.0/0"
+}
+
+/*module "common-route" {
   source = "modules/network/routes/"
   route_table_id = "${module.public-route-table.rtid}"
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id = "${module.igw.igwid}"
-  nat_gateway_id = "0"
-}
+}*/
