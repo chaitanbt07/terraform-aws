@@ -99,7 +99,7 @@ module "ngw" {
   internet_gateway = "${module.igw.igwid}"
   env = "${var.env}"
   subnet_id = "${module.public-frontend-subnet.subnetid}"
-  route_table_id = ["${module.app-private-route-table.rtid}" "${module.db-private-route-table.rtid}"]
+  route_table_id = ["${module.app-private-route-table.rtid}", "${module.db-private-route-table.rtid}"]
 }
 
 /*module "common-route" {
