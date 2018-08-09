@@ -113,12 +113,20 @@ module "ngw" {
   #route_table_id = ["${module.app-private-route-table.rtid}", "${module.db-private-route-table.rtid}"]
 }
 
-module "nat-gateway-route" {
+module "nat-gateway-route-app-subnet" {
   source = "modules/network/routes/"
   route_table_id = "${module.app-private-route-table.rtid}"
   destination_cidr_block = "0.0.0.0/0"
   create_vpc = "${var.create_vpc}"
-  gateway_route = false
+  nat_gateway_route = true
+  nat_gateway_id = "${module.ngw.ngw}"
+}
+
+module "nat-gateway-route-db-subnet" {
+  source = "modules/network/routes/"
+  route_table_id = "${module.app-db-route-table.rtid}"
+  destination_cidr_block = "0.0.0.0/0"
+  create_vpc = "${var.create_vpc}"
   nat_gateway_route = true
   nat_gateway_id = "${module.ngw.ngw}"
 }
