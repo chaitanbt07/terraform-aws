@@ -9,7 +9,7 @@ variable "subnet_id" {
 
 variable "route_table_id" {
     description = "The Private route table"
-    default = ""
+    type = "list"
 }
 
 variable "create_vpc" {}
