@@ -124,7 +124,7 @@ module "nat-gateway-route-app-subnet" {
 
 module "nat-gateway-route-db-subnet" {
   source = "modules/network/routes/"
-  route_table_id = "${module.app-db-route-table.rtid}"
+  route_table_id = "${module.db-private-route-table.rtid}"
   destination_cidr_block = "0.0.0.0/0"
   create_vpc = "${var.create_vpc}"
   nat_gateway_route = true
