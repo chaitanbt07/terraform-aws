@@ -1,6 +1,6 @@
 resource "aws_eip" "natgweip" {
   vpc = true
-  depends_on                = ["${var.internet_gateway}"]
+  #depends_on                = ["${var.internet_gateway}"]
   tags {
       Name = "${var.env}-natgweip"
   }
