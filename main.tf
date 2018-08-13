@@ -175,7 +175,7 @@ module "public-lb" {
   source = "modules/compute/elb/"
   availability_zones = ["${data.aws_availability_zones.available.names[0]}", "${data.aws_availability_zones.available.names[1]}"]
   subnets = ["${module.public-frontend-subnet-primary.subnetid}", "${module.public-frontend-subnet-secondary.subnetid}"]
-  cross_zone_load_balancing = "false"
+  cross_zone_load_balancing = "${var.cross_zone_load_balancing}"
   elb_name = "public-lb"
   env = "${var.env}"
 }

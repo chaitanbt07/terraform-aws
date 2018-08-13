@@ -36,3 +36,7 @@ variable "create_vpc" {
 variable "enable_dhcp_options" {
   default = true
 }
+
+variable "cross_zone_load_balancing" {
+  default = false
+}
