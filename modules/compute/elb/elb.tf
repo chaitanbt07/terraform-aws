@@ -1,5 +1,5 @@
 # Create a new load balancer
-resource "aws_elb" "bar" {
+resource "aws_elb" "elb" {
   name               = "${var.elb_name}"
   availability_zones = ["${var.availability_zones}"]
 

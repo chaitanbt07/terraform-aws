@@ -30,7 +30,7 @@ variable "private-db-subnet" {
 }
 
 variable "create_vpc" {
-  default = false
+  default = true
 }
 
 variable "enable_dhcp_options" {
