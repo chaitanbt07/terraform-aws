@@ -11,3 +11,5 @@ variable "subnets" {
 variable "cross_zone_load_balancing" {
     default = "true"
 }
+
+variable "env" {}
