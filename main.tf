@@ -172,7 +172,7 @@ module "nat-gateway-route-db-subnet" {
 }
 
 module "public-lb" {
-  source = "module/compute/elb/"
+  source = "modules/compute/elb/"
   availability_zones = ["${data.aws_availability_zones.available.names[0]}", "${data.aws_availability_zones.available.names[1]}"]
   subnets = ["${module.public-frontend-subnet-primary.subnetid}", "${module.public-frontend-subnet-secondary.subnetid}"]
   cross_zone_load_balancing = "false"
