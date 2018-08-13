@@ -4,6 +4,8 @@ provider "aws" {
   region     = "${var.region}"
 }
 
+data "aws_availability_zones" "available" {}
+
 module "core-network-vpc" {
   # Configure AWS VPC
   source     = "modules/network/vpc/"
@@ -23,12 +25,24 @@ module "core-network-dhcp" {
   enable_dhcp_options = "${var.enable_dhcp_options}"
 }
 
-module "public-frontend-subnet" {
+module "public-frontend-subnet-primary" {
   # Configure public subnet 
   source     = "modules/network/subnet/"
   name       = "core-network-vpc-publicsubnet"
   vpc_id     = "${module.core-network-vpc.id}"
-  cidr_block = "${var.public-frontend-subnet}"
+  cidr_block = "${var.public-frontend-subnet-primary}"
+  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  create_vpc = "${var.create_vpc}"
+  env        = "${var.env}"
+}
+
+module "public-frontend-subnet-secondary" {
+  # Configure secondary public subnet 
+  source     = "modules/network/subnet/"
+  name       = "core-network-vpc-publicsubnet-secondary"
+  vpc_id     = "${module.core-network-vpc.id}"
+  cidr_block = "${var.public-frontend-subnet-secondary}"
+  availability_zone = "${data.aws_availability_zones.available.names[1]}"
   create_vpc = "${var.create_vpc}"
   env        = "${var.env}"
 }
@@ -38,6 +52,7 @@ module "private-app-subnet" {
   source     = "modules/network/subnet/"
   name       = "core-network-vpc-app-privatesubnet"
   vpc_id     = "${module.core-network-vpc.id}"
+  availability_zone = "${data.aws_availability_zones.available.names[0]}"
   cidr_block = "${var.private-app-subnet}"
   create_vpc = "${var.create_vpc}"
   env        = "${var.env}"
@@ -48,6 +63,7 @@ module "private-db-subnet" {
   source     = "modules/network/subnet/"
   name       = "core-network-vpc-db-privatesubnet"
   vpc_id     = "${module.core-network-vpc.id}"
+  availability_zone = "${data.aws_availability_zones.available.names[0]}"
   cidr_block = "${var.private-db-subnet}"
   create_vpc = "${var.create_vpc}"
   env        = "${var.env}"
@@ -61,7 +77,20 @@ module "public-route-table" {
   env        = "${var.env}"
   type       = "public"                                    # public or private
   create_vpc = "${var.create_vpc}"
-  subnet_id  = "${module.public-frontend-subnet.subnetid}"
+}
+
+module "primary-rt-association" {
+  source = "modules/network/routetableassociation/"
+  create_vpc = "${var.create_vpc}"
+  subnet_id = "${module.public-frontend-subnet-primary.subnetid}"
+  route_table_id = "${module.public-route-table.rtid}"
+}
+
+module "secondary-rt-association" {
+  source = "modules/network/routetableassociation/"
+  create_vpc = "${var.create_vpc}"
+  subnet_id = "${module.public-frontend-subnet-secondary.subnetid}"
+  route_table_id = "${module.public-route-table.rtid}"
 }
 
 module "app-private-route-table" {
@@ -71,7 +100,6 @@ module "app-private-route-table" {
   env        = "${var.env}"
   type       = "app-private"
   create_vpc = "${var.create_vpc}"
-  subnet_id  = "${module.private-app-subnet.subnetid}"
 }
 
 module "db-private-route-table" {
@@ -81,7 +109,20 @@ module "db-private-route-table" {
   env        = "${var.env}"
   type       = "db-private"
   create_vpc = "${var.create_vpc}"
-  subnet_id  = "${module.private-db-subnet.subnetid}"
+}
+
+module "app-rt-association" {
+  source = "modules/network/routetableassociation/"
+  create_vpc = "${var.create_vpc}"
+  subnet_id = "${module.private-app-subnet.subnetid}"
+  route_table_id = "${module.app-private-route-table.rtid}"
+}
+
+module "db-rt-association" {
+  source = "modules/network/routetableassociation/"
+  create_vpc = "${var.create_vpc}"
+  subnet_id = "${module.private-db-subnet.subnetid}"
+  route_table_id = "${module.db-private-route-table.rtid}"
 }
 
 module "igw" {
@@ -108,10 +149,8 @@ module "ngw" {
   nat_gateway_route = true
   env               = "${var.env}"
   create_vpc        = "${var.create_vpc}"
-  subnet_id         = "${module.public-frontend-subnet.subnetid}"
+  subnet_id         = "${module.public-frontend-subnet-primary.subnetid}"
   allocation_id     = "${module.ngweip.eipalloc}"
-
-  #route_table_id = ["${module.app-private-route-table.rtid}", "${module.db-private-route-table.rtid}"]
 }
 
 module "nat-gateway-route-app-subnet" {
@@ -131,3 +170,10 @@ module "nat-gateway-route-db-subnet" {
   nat_gateway_route      = true
   nat_gateway_id         = "${module.ngw.ngw}"
 }
+
+/*module "public-lb" {
+  source = "module/compute/elb/"
+  availability_zones = ["${data.aws_availability_zones.available.names[0]}", "${data.aws_availability_zones.available.names[1]}"
+  subnets = ["${module.public-frontend-subnet-primary.subnetid}" "${module.public-frontend-subnet-secondary.subnetid}"]
+  cross_zone_load_balancing = "false"
+}*/

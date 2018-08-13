@@ -6,7 +6,3 @@ variable "create_vpc" {}
 variable "type" {
   default = ""
 }
-
-variable "subnet_id" {
-  default = ""
-}

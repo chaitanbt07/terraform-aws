@@ -6,16 +6,28 @@ output "dhcpoptionsetassocid" {
   value = "${module.core-network-dhcp.dhcpopassoid}"
 }
 
-output "publicfrontendsubnetid" {
-  value = "${module.public-frontend-subnet.subnetid}"
+output "publicfrontend-primary-subnetid" {
+  value = "${module.public-frontend-subnet-primary.subnetid}"
 }
 
-output "publicfrontendsubnet-az" {
-  value = "${module.public-frontend-subnet.subnet-az}"
+output "publicfrontend-primary-subnet-az" {
+  value = "${module.public-frontend-subnet-primary.subnet-az}"
 }
 
-output "publicfrontendsubnet-cidr" {
-  value = "${module.public-frontend-subnet.subnet-cidr}"
+output "publicfrontend-primary-subnet-cidr" {
+  value = "${module.public-frontend-subnet-primary.subnet-cidr}"
+}
+
+output "publicfrontend-secondary-subnetid" {
+  value = "${module.public-frontend-subnet-secondary.subnetid}"
+}
+
+output "publicfrontend-secondary-subnet-az" {
+  value = "${module.public-frontend-subnet-secondary.subnet-az}"
+}
+
+output "publicfrontend-secondary-subnet-cidr" {
+  value = "${module.public-frontend-subnet-secondary.subnet-cidr}"
 }
 
 output "private-app-subnetid" {

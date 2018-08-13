@@ -15,3 +15,7 @@ variable "env" {
 variable "create_vpc" {
   default = ""
 }
+
+variable "availability_zone" {
+  default = ""
+}
