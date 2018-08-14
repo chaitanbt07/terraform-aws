@@ -1,7 +1,7 @@
 # Create a new load balancer
 resource "aws_elb" "elb" {
   name               = "${var.env}-${var.elb_name}"
-  availability_zones = ["${var.availability_zones}"]
+  #availability_zones = ["${var.availability_zones}"]
 
   /*access_logs {
     bucket        = "foo"
