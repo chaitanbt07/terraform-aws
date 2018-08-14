@@ -21,7 +21,7 @@ resource "aws_elb" "elb" {
 
   listener {
     instance_port      = 8000
-    instance_protocol  = "http"
+    instance_protocol  = "TCP"
     lb_port            = 443
     lb_protocol        = "TCP"
     #ssl_certificate_id = "arn:aws:iam::123456789012:server-certificate/certName"
