@@ -179,3 +179,14 @@ module "public-lb" {
   elb_name = "public-lb"
   env = "${var.env}"
 }
+
+data "aws_kms_key" "storagekey" {
+  key_id = "alias/aws/ebs"
+}
+
+module "ebs" {
+  source = "modules/compute/ebs/"
+  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  kms_key_id = "${data.aws_kms_key.storagekey.arn}"
+  encrypted = "true"
+}
