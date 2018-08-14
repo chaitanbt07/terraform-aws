@@ -38,5 +38,5 @@ variable "enable_dhcp_options" {
 }
 
 variable "cross_zone_load_balancing" {
-  default = true
+  default = false
 }
