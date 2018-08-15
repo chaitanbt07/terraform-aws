@@ -1,5 +1,5 @@
 variable "solution_stack_name" {
-    default = "64bit Amazon Linux 2018.03 v2.7.1 running Python 3.6"
+    default = "64bit Amazon Linux 2018.03 v2.7.1 running Python 2.7"
 }
 
 variable "tier" {
