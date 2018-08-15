@@ -14,7 +14,7 @@ resource "aws_elastic_beanstalk_environment" "beanstalkenv" {
   application         = "${aws_elastic_beanstalk_application.beanstalkapp.name}"
   cname_prefix = "${var.appname}"
   tier = "${var.tier}"
-  version_label = "${var.version_label}"
+  #version_label = "${var.version_label}"
   solution_stack_name = "${var.solution_stack_name}"
 
   setting {
