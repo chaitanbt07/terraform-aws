@@ -27,5 +27,21 @@ variable "public_subnet" {}
 variable "service_role" {}
 
 variable "associate_public_ip_address" {
-    default = "false"
+    default = "true"
+}
+
+variable "iam_instance-profile" {
+    default = "aws-elasticbeanstalk-ec2-role"
+}
+
+variable "instance_type" {
+    default = "t2.micro"
+}
+
+variable "min_size" {
+    default = 1
+}
+
+variable "max_size" {
+    default = 3
 }
