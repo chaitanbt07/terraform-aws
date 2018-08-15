@@ -190,3 +190,19 @@ module "ebs" {
   kms_key_id = "${data.aws_kms_key.storagekey.arn}"
   encrypted = "true"
 }
+
+module "beanstalk-role" {
+  source = "modules/security/"
+  role_name = "aws-elasticbeanstalk-service-role"
+}
+
+module "paas-elasticbeanstalk" {
+  source = "modules/paas/"
+  env = "${var.env}"
+  appname = "sampleapp"
+  service_role = "${module.beanstalk-role.rolearn}"
+  tier = "WebServer" # e.g. ('WebServer', 'Worker')
+  vpcid = "${module.core-network-vpc.id}"
+  version_label = "sample-v0.1"
+  public_subnet = "${module.public-frontend-subnet-primary.subnetid}"
+} 
