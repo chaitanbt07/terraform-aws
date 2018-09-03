@@ -46,13 +46,11 @@ Begin {
 }
 Process {
     try {
-        Write-Host $Json
-	Write-Host $Post
         $Result = (Invoke-RestMethod @Post).data
 
         Write-Host ('##vso[task.setvariable variable=TFE_WORKSPACEID]{0}' -f $Result.id)
-	Write-Host $Result
-
+	Write-Output "TFE_WORKSPACE_ID=$($Result.id)" |out-file ./TFE_WORKSPACEID.txt 
+	gci
         Return $Result
     }
     catch {
@@ -83,7 +81,8 @@ Process {
             $Result = (Invoke-RestMethod @Get).data
 
             write-host ('##vso[task.setvariable variable=TFE_WORKSPACEID]{0}' -f $Result.id)
-
+	    Write-Output "TFE_WORKSPACE_ID=$($Result.id)" |out-file ./TFE_WORKSPACEID.txt 
+	    gci
             Return $Result
         }
         catch {
