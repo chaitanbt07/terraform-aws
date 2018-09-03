@@ -1,13 +1,13 @@
 [CmdletBinding()]
 [Alias()]
-[OutputType([object]
+[OutputType([object])]
 Param                                                                                                                                                 
 (                                                                                                                                                 
     #Organization
 	[Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, 
 	Position=0)] 
-	$Organization,                                                                                                                                    
-    #Workspace
+	$Organization,
+	#Workspace
     [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, 
 	Position=1)]
 	$WorkSpaceName,
@@ -45,7 +45,7 @@ Process {
 
         Write-Host ('##vso[task.setvariable variable=TFE_WORKSPACEID]{0}' -f $Result.id)
 	    Write-Output "TFE_WORKSPACE_ID=$($Result.id)" |out-file ./TFE_WORKSPACEID.txt 
-	    gci
+	    Get-ChildItem
         Return $Result
     }
     catch {
@@ -77,7 +77,7 @@ Process {
 
             Write-Host ('##vso[task.setvariable variable=TFE_WORKSPACEID]{0}' -f $Result.id)
 	        Write-Output "TFE_WORKSPACE_ID=$($Result.id)" |out-file ./TFE_WORKSPACEID.txt 
-	        gci
+	        Get-ChildItem
             Return $Result
         }
         catch {
