@@ -44,7 +44,7 @@ Process {
         Write-Host ('##vso[task.setvariable variable=TFE_UPLOADURL]{0}' -f $Result.attributes.'upload-url')
         Write-Host ('##vso[task.setvariable variable=TFE_CONFIGID]{0}' -f $Result.id)
         
-        Write-Output "TFE_WORKSPACE_ID=$($Result.id)" |out-file ./TFE_CONFIGID.txt
+        Write-Output "TFE_CONFIGID=$($Result.id)" |out-file ./TFE_CONFIGID.txt
         Write-Output "TFE_UPLOADURL=$($Result.'upload-url')" |out-file ./TFE_CONFIGID.txt
         gci
         Return $Result
