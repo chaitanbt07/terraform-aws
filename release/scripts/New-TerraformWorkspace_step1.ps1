@@ -1,4 +1,25 @@
-[CmdletBinding()]                                                                                                                                            [Alias()]                                                                                                                                                    [OutputType([object])]                                                                                                                                       Param                                                                                                                                                        (                                                                                                                                                                # Organization                                                                                                                                               [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, Position=0)]                                                                              $Organization,                                                                                                                                                                                                                                                                                                            # Workspace                                                                                                                                                  [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, Position=1)]                                                                              $WorkSpaceName,                                                                                                                                                                                                                                                                                                           # Token                                                                                                                                                      [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, Position=2)]                                                                              $Token                                                                                                                                                   
+[CmdletBinding()]                                                                                                                                        
+    
+[Alias()]                                                                                                                                                
+    
+[OutputType([object])]                                                                                                                                   
+    
+Param                                                                                                                                                    
+ 	(                                                                                                                                                    
+	#Organization                                                                                                                                        
+	[Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, 
+	Position=0)]                                                                              
+	$Organization,                                                                                                                                       
+	
+	#Workspace                                                                                                                                           
+	[Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, 
+	Position=1)]                                                                              
+	$WorkSpaceName,                                                                                                                                      
+	
+	#Token                                                                                                                                               
+	[Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, 
+	Position=2)]
+	$Token
 )
 
 Begin {
