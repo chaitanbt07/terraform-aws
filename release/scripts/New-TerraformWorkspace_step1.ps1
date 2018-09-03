@@ -46,9 +46,12 @@ Begin {
 }
 Process {
     try {
+        Write-Host $Json
+	Write-Host $Post
         $Result = (Invoke-RestMethod @Post).data
 
         Write-Host ('##vso[task.setvariable variable=TFE_WORKSPACEID]{0}' -f $Result.id)
+	Write-Host $Result
 
         Return $Result
     }
