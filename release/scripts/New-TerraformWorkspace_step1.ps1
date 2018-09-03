@@ -1,22 +1,17 @@
-[CmdletBinding()]                                                                                                                                        
-    
-[Alias()]                                                                                                                                                
-    
-[OutputType([object])]                                                                                                                                   
-    
-Param                                                                                                                                                    
- 	(                                                                                                                                                    
-	#Organization                                                                                                                                        
+[CmdletBinding()]
+[Alias()]
+[OutputType([object]
+Param                                                                                                                                                 
+(                                                                                                                                                 
+    #Organization
 	[Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, 
-	Position=0)]                                                                              
-	$Organization,                                                                                                                                       
-	
-	#Workspace                                                                                                                                           
-	[Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, 
-	Position=1)]                                                                              
-	$WorkSpaceName,                                                                                                                                      
-	
-	#Token                                                                                                                                               
+	Position=0)] 
+	$Organization,                                                                                                                                    
+    #Workspace
+    [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, 
+	Position=1)]
+	$WorkSpaceName,
+	#Token
 	[Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, 
 	Position=2)]
 	$Token
@@ -49,8 +44,8 @@ Process {
         $Result = (Invoke-RestMethod @Post).data
 
         Write-Host ('##vso[task.setvariable variable=TFE_WORKSPACEID]{0}' -f $Result.id)
-	Write-Output "TFE_WORKSPACE_ID=$($Result.id)" |out-file ./TFE_WORKSPACEID.txt 
-	gci
+	    Write-Output "TFE_WORKSPACE_ID=$($Result.id)" |out-file ./TFE_WORKSPACEID.txt 
+	    gci
         Return $Result
     }
     catch {
@@ -80,9 +75,9 @@ Process {
 
             $Result = (Invoke-RestMethod @Get).data
 
-            write-host ('##vso[task.setvariable variable=TFE_WORKSPACEID]{0}' -f $Result.id)
-	    Write-Output "TFE_WORKSPACE_ID=$($Result.id)" |out-file ./TFE_WORKSPACEID.txt 
-	    gci
+            Write-Host ('##vso[task.setvariable variable=TFE_WORKSPACEID]{0}' -f $Result.id)
+	        Write-Output "TFE_WORKSPACE_ID=$($Result.id)" |out-file ./TFE_WORKSPACEID.txt 
+	        gci
             Return $Result
         }
         catch {
