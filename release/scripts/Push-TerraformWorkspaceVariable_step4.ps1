@@ -50,7 +50,7 @@
 
             try
             {
-                $Credential | % {if ($_.key -match "secret") -or ($_.key -match "access"){$sensitive,$hcl,$keyname = $true,$false,$Credential.key}else{$sensitive,$hcl,$keyname =  $false,$true,$($_.key.SubString($_.key.LastIndexOf('aws_')+1))}}
+                $Credential | % {if ($_.key -match "secret") -or ($_.key -match "access") { $sensitive,$hcl,$keyname = $true,$false,$Credential.key}else{$sensitive,$hcl,$keyname =  $false,$true,$($_.key.SubString($_.key.LastIndexOf('aws_')+1))}}
 		Write-host "Variable $Credential.key State: $sensitive"
 		Write-Host "Variable $Credential.key Type: $hcl"
 		$Json = @{
