@@ -50,16 +50,17 @@
 
             try
             {
-                $Credential | % {if ($_.key -match "secret"){$sensitive = $true}else{$sensitive = $false}}
-		Write-host "Variable State: $sensitive"
+                $Credential | % {if ($_.key -match "secret"){$sensitive = $true, $hcl = $false}else{$sensitive = $false, $hcl = $true}}
+		Write-host "Variable $Credential.key State: $sensitive"
+		Write-Host "Variable $Credential.key Type: $hcl"
 		$Json = @{
                   "data"= @{
                     "type"="vars"
                     "attributes"= @{
                       "key"=$Credential.key
                       "value"=$Credential.value
-                      "category"="env"
-                      "hcl"=$false
+                      "category"="terraform"
+                      "hcl"=$hcl
                       "sensitive"=$sensitive
                     }
                     "relationships"= @{
