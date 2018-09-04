@@ -50,14 +50,14 @@
 
             try
             {
-                $Credential | % {if ($_.Key -match "secret"){$sensitive = $true}else{$sensitive = $false}}
+                $Credential | % {if ($_.key -match "secret"){$sensitive = $true}else{$sensitive = $false}}
 		Write-host "Variable State: $sensitive"
 		$Json = @{
                   "data"= @{
                     "type"="vars"
                     "attributes"= @{
-                      "key"=$Credential.Key
-                      "value"=$Credential.Value
+                      "key"=$Credential.key
+                      "value"=$Credential.value
                       "category"="env"
                       "hcl"=$false
                       "sensitive"=$sensitive
