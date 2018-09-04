@@ -86,7 +86,8 @@
 
                 $Result = (Invoke-RestMethod @Post).data
 		Write-Host $Result.id
-		Write-Output "$keyname=$($Result.id)" |out-file ./TFE_VAR.txt
+		Write-host $Result
+		Write-Output "$keyname=$($Result.id)" |out-file -Append ./TFE_VAR.txt
 
             }
             catch
