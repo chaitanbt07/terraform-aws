@@ -50,7 +50,8 @@
 
             try
             {
-                $Json = @{
+                $Credential | % {if ($_.Key -match "secret"){$sensitive = $true}else{$sensitive = $false}}
+				$Json = @{
                   "data"= @{
                     "type"="vars"
                     "attributes"= @{
@@ -58,7 +59,7 @@
                       "value"=$Credential.Value
                       "category"="env"
                       "hcl"=$false
-                      "sensitive"=$true
+                      "sensitive"=$sensitive
                     }
                     "relationships"= @{
                       "workspace"= @{
