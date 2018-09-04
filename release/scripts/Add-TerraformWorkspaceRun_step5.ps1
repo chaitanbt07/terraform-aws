@@ -37,7 +37,7 @@
 
         Write-Host "$($MyInvocation.MyCommand.Name): Script execution started"
 
-        $Comment = "Run Requested By $($env:RELEASE_REQUESTEDFOR) for $($env:RELEASE_RELEASENAME) build number $($env:BUILD_BUILDNUMBER) "
+        $Comment = "Run Requested By Release $($env:deploy.release) for $($env:buildResultKey) build number $($env:buildNumber) "
         
         $Json = @{
           "data"= @{
@@ -80,11 +80,9 @@
 
         try
         {
-            
-           
-          
-
-            Write-Host ('##vso[task.setvariable variable=TFE_RUNID]{0}' -f $Result.id)
+            $Result = (Invoke-RestMethod @Post).data
+            Write-Output "TFE_RUN_ID=$($Result.id)" |out-file ./TFE_RUNID.txt 
+			Write-Host ('##vso[task.setvariable variable=TFE_RUNID]{0}' -f $Result.id)
 
         }
         catch
