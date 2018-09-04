@@ -50,14 +50,14 @@
 
             try
             {
-                $Credential | % {if ($_.key -match "secret"){$sensitive,$hcl = $true,$false}else{$sensitive,$hcl = $false,$true}}
+                $Credential | % {if ($_.key -match "secret") -or ($_.key -match "access"){$sensitive,$hcl,$keyname = $true,$false,$Credential.key}else{$sensitive,$hcl,$keyname =  $false,$true,$($_.key.SubString($_.key.LastIndexOf('aws_')+1))}}
 		Write-host "Variable $Credential.key State: $sensitive"
 		Write-Host "Variable $Credential.key Type: $hcl"
 		$Json = @{
                   "data"= @{
                     "type"="vars"
                     "attributes"= @{
-                      "key"=$Credential.key
+                      "key"=$keyname
                       "value"=$Credential.value
                       "category"="terraform"
                       "hcl"=$hcl
