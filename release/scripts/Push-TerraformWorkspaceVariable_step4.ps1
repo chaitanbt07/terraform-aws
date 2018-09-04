@@ -84,7 +84,7 @@
 
                 }
 
-                $Result = (Invoke-WebRequest @Post).data
+                $Result = (Invoke-RestMethod @Post).data
 		Write-Host $Result.id
 		Write-Output "$keyname=$($Result.id)" |out-file ./TFE_VAR.txt
 
