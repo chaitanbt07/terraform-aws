@@ -51,7 +51,8 @@
             try
             {
                 $Credential | % {if ($_.Key -match "secret"){$sensitive = $true}else{$sensitive = $false}}
-				$Json = @{
+		Write-host "Variable State: $sensitive"
+		$Json = @{
                   "data"= @{
                     "type"="vars"
                     "attributes"= @{
