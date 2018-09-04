@@ -42,7 +42,7 @@
     }
     Process
     {
-
+        New-Item ./TFE_VAR.txt -ItemType file
         ForEach($Credential in $Credentials)
         {
 
@@ -84,7 +84,8 @@
 
                 }
 
-                Invoke-WebRequest @Post
+                $Result = (Invoke-WebRequest @Post).data
+		Write-Output "$keyname=$($Result.id)" |out-file -Append ./TFE_VAR.txt
 
             }
             catch
