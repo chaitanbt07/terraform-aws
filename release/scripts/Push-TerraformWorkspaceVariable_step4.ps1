@@ -50,9 +50,8 @@
 
             try
             {
-                #$Credential | % {if (($_.key -match "secret") -or ($_.key -match "access")) { $sensitive,$hcl,$keyname = $true,$false,$Credential.key}else{$sensitive,$hcl,$keyname =  $false,$true,$($_.key.SubString($_.key.LastIndexOf('_')+1))}}
-		$Credential | % {if (($_.key -match "secret") -or ($_.key -match "access")) { $sensitive,$hcl,$keyname = $true,$false,$Credential.key}else{$sensitive,$hcl,$keyname =  $false,$false,$($_.key.remove(0,4))}}
-		$Json = @{
+                $Credential | % {if (($_.key -match "secret") -or ($_.key -match "access")) { $sensitive,$hcl,$keyname = $true,$false,$Credential.key}else{$sensitive,$hcl,$keyname =  $false,$false,$($_.key.remove(0,4))}}
+		        $Json = @{
                   "data"= @{
                     "type"="vars"
                     "attributes"= @{
@@ -85,9 +84,9 @@
                 }
 
                 $Result = (Invoke-RestMethod @Post).data
-		Write-Host $Result.id
-		Write-host $Result
-		Write-Output "$keyname=$($Result.id)" |out-file -Append ./TFE_VAR.txt
+		        Write-Host $Result.id
+		        Write-host $Result
+		        Write-Output "$keyname=$($Result.id)" |out-file -Append ./TFE_VAR.txt
 
             }
             catch
