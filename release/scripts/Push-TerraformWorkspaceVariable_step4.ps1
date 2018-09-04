@@ -57,7 +57,7 @@
                     "type"="vars"
                     "attributes"= @{
                       "key"=$keyname
-                      "value"="$Credential.value"
+                      "value"=$Credential.value
                       "category"="terraform"
                       "hcl"=$hcl
                       "sensitive"=$sensitive
