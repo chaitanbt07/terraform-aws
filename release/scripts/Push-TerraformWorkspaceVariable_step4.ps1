@@ -37,7 +37,7 @@
 
         Write-Host "$($MyInvocation.MyCommand.Name): Script execution started"
 
-        $Credentials = Get-ChildItem -Path "env:$Provider*"
+        $Credentials = Get-ChildItem -Path "env:*"
 
     }
     Process
