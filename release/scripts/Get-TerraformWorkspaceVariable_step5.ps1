@@ -58,7 +58,8 @@ Process {
     ForEach($Credential in $Credentials)
     {
         Write-Host "Inside For Individual cred: $($Credential.key) = $($Credential.value)"
-        $Credential | % {if ($_.key -match $Result[$count].attributes.key)
+        write-host "Result Value: $($Result[$count].attributes.key)"
+        $Credential | % {if ($_.key -match $($Result[$count].attributes.key))
         {
             Write-Host "Inside If"
                 Write-Host "$($Result[$count].id) = $($Result[$count].attributes.key) for $($Credential.key) = $($Credential.value)"
