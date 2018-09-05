@@ -79,7 +79,7 @@ Process {
                 Uri = "https://app.terraform.io/api/v2/vars/$Result[$count].id"
                 Headers     = @{"Authorization" = "Bearer $Token" }
                 ContentType = 'application/vnd.api+json'
-                Method      = 'Patch'
+                Method      = 'PATCH'
                 Body        = $Json
                 ErrorAction = 'stop'
             }
