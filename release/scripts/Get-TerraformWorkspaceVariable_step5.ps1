@@ -60,7 +60,7 @@ Process {
         $count = 0
         Write-Host "Inside For Individual cred: $($Credential.key) = $($Credential.value)"
         write-host "Result Value: $($Result[$count].attributes.key)"
-        $Credential | % {if ($_.key -match $($Result[$count].attributes.key))
+        $Credential | % {if ($_.key -match $($Result.attributes.key))
         {
             Write-Host "Inside If"
                 Write-Host "$($Result[$count].id) = $($Result[$count].attributes.key) for $($Credential.key) = $($Credential.value)"
