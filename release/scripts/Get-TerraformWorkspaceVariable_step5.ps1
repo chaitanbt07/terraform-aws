@@ -101,8 +101,9 @@ Process {
             }
     $count++
 }
+            else { $count++ }
 }
-else { $count++ }
+
 }
 }
 End {
