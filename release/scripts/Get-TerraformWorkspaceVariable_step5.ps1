@@ -48,9 +48,9 @@ Begin {
 Process {
     $Result = (Invoke-RestMethod @GET).data
     Write-Host $Result.id
-    ForEach($Variable in $Result.id)
+    ForEach($var in $Result.id)
     {
-        Write-Host "$($MyInvocation.MyCommand.Name): Updating $($Variable.Key) variable to Terraform Enterprise Workspace (Name:$WorkSpaceName)"
+        Write-Host "$($MyInvocation.MyCommand.Name): Updating $($var) variable to Terraform Enterprise Workspace (Name:$WorkSpaceName)"
     }
 }
 End {
