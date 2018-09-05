@@ -56,7 +56,7 @@ Process {
     $count=0
     ForEach($Credential in $Credentials)
     {
-        $Credential | % {if ($_.key -match $($Result.attributes.key))
+        $Credential | % {if ($_.key -match $($Result[$count].attributes.key))
         {
             try {
                 $Json = @{
@@ -103,7 +103,6 @@ Process {
 }
             else { $count++ }
 }
-
 }
 }
 End {
