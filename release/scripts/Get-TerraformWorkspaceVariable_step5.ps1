@@ -74,18 +74,18 @@ Process {
                             "category"="terraform"
                             }
                     }
-                } | ConvertTo-Json -Depth 5
+                } | ConvertTo-Json
 
     $Patch = @{
-                Uri = "https://app.terraform.io/api/v2/vars/$Result[$count].id"
+                Uri = "https://app.terraform.io/api/v2/vars/$($Result[$count].id)"
                 Headers     = @{"Authorization" = "Bearer $Token" }
                 ContentType = 'application/vnd.api+json'
                 Method      = 'Patch'
                 Body        = $Json
                 ErrorAction = 'stop'
             }
-            Write-Host $Patch
-            $Update = (Invoke-WebRequest @Patch).data
+            Write-Host "Patch output$($Patch)"
+                    $Update = (Invoke-RestMethod @Patch).data
     }
     catch
             {
