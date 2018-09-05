@@ -54,9 +54,10 @@ Process {
     $Result = (Invoke-RestMethod @GET).data
     $Credentials = Get-ChildItem -Path "env:$Provider*"
     Write-Host "Credentials: $($Credentials)"
-    $count=0
+    
     ForEach($Credential in $Credentials)
     {
+        $count = 0
         Write-Host "Inside For Individual cred: $($Credential.key) = $($Credential.value)"
         write-host "Result Value: $($Result[$count].attributes.key)"
         $Credential | % {if ($_.key -match $($Result[$count].attributes.key))
