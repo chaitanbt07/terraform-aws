@@ -84,7 +84,7 @@ Process {
                 ErrorAction = 'stop'
             }
             Write-Host $Patch
-            $Update = (Invoke-RestMethod @Patch).data
+            $Update = (Invoke-WebRequest @Patch).data
             Write-Host "Update: $($Update)"
         }
 
