@@ -53,42 +53,36 @@ Begin {
 Process {
     $Result = (Invoke-RestMethod @GET).data
     $Credentials = Get-ChildItem -Path "env:$Provider*"
-    #$count=0
-    Write-Host "env: $($Credentials.Length)"
-    For($count=0; $count -lt $($Credentials.Length);)
+    $count=0
+    ForEach($Credential in $Credentials)
     {
-        Write-Host "$($MyInvocation.MyCommand.Name): Updating $($Credentials[$count].Key) variable to Terraform Enterprise Workspace (Name:$WorkSpaceName)"
-        Write-Host "Variablekey: $($Result[$count].attributes.key)"
-        Write-Host "Variablevalue: $($Credentials[$count].value)"
-        try {
-            $Json = @{
-                "data"= @{
-                    "type"="vars"
-                    "id"=$Result[$count].id
-                    "attributes"= @{
-                        "key"=$Result[$count].attributes.key
-                        "value"=$Credentials[$count].value
-                        "category"="terraform"
-                        "hcl"= $hcl
-                        "sensitive"= $sensitive
+        $Credential | % {if ($_.key -match $($Result.attributes.key))
+        {
+            try {
+                $Json = @{
+                    "data"= @{
+                        "type"="vars"
+                        "id"=$Result[$count].id
+                        "attributes"= @{
+                            "key"=$Result[$count].attributes.key
+                            "value"=$Credentials.value
+                            "category"="terraform"
+                            }
                     }
-                } 
-            } | ConvertTo-Json -Depth 5
-            Write-Host "Json: $($Json)"
-            $Patch = @{
+                } | ConvertTo-Json -Depth 5
+
+    $Patch = @{
                 Uri = "https://app.terraform.io/api/v2/vars/$Result[$count].id"
                 Headers     = @{"Authorization" = "Bearer $Token" }
                 ContentType = 'application/vnd.api+json'
-                Method      = 'PATCH'
+                Method      = 'Patch'
                 Body        = $Json
                 ErrorAction = 'stop'
             }
             Write-Host $Patch
             $Update = (Invoke-WebRequest @Patch).data
-            Write-Host "Update: $($Update)"
-        }
-
-        catch
+    }
+    catch
             {
 
                 $ErrorID = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.status
@@ -105,9 +99,11 @@ Process {
                 }
 
             }
-
-        $count++
-    }
+    $count++
+}
+}
+else { $count++ }
+}
 }
 End {
 
