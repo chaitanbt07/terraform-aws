@@ -57,7 +57,8 @@ Process {
     ForEach($Credential in $Credentials)
     {
         Write-Host "$($MyInvocation.MyCommand.Name): Updating $($Credential.Key) variable to Terraform Enterprise Workspace (Name:$WorkSpaceName)"
-
+        Write-Host "Variablekey: $($Result[$count].attributes.key)"
+        Write-Host "Variablevalue: $($Credential.value)"
         try {
             $Json = @{
                 "data"= @{
@@ -72,7 +73,7 @@ Process {
                     }
                 } 
             } | ConvertTo-Json -Depth 5
-
+            Write-Host "Json: $($Json)"
             $Patch = @{
                 Uri = "https://app.terraform.io/api/v2/vars/$Result[$count].id"
                 Headers     = @{"Authorization" = "Bearer $Token" }
@@ -83,6 +84,7 @@ Process {
             }
 
             $Update = (Invoke-RestMethod @Patch).data
+            Write-Host "Update: $($Update)"
         }
 
         catch
