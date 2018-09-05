@@ -54,7 +54,7 @@ Process {
     $Result = (Invoke-RestMethod @GET).data
     $Credentials = Get-ChildItem -Path "env:$Provider*"
     $count=0
-    Write-Host "env: $($Credentials)"
+    Write-Host "env: $Credentials"
     ForEach($Credential in $Credentials)
     {
         Write-Host "$($MyInvocation.MyCommand.Name): Updating $($Credential.Key) variable to Terraform Enterprise Workspace (Name:$WorkSpaceName)"
