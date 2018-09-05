@@ -25,9 +25,14 @@ Param
         Position = 1)]
     $WorkSpaceName,
 
+    [Parameter(Mandatory=$true,
+                   ValueFromPipelineByPropertyName=$true,
+                   Position=2)]
+    $Provider,
+
     #Token
 	[Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, 
-	Position=2)]
+	Position=3)]
 	$Token
 
 )
@@ -47,10 +52,58 @@ Begin {
 }
 Process {
     $Result = (Invoke-RestMethod @GET).data
-    Write-Host $Result.id
-    ForEach($var in $Result.id)
+    $Credentials = Get-ChildItem -Path "env:$Provider*"
+    $count=0
+    ForEach($Credential in $Credentials)
     {
-        Write-Host "$($MyInvocation.MyCommand.Name): Updating $($var) variable to Terraform Enterprise Workspace (Name:$WorkSpaceName)"
+        Write-Host "$($MyInvocation.MyCommand.Name): Updating $($Credential.Key) variable to Terraform Enterprise Workspace (Name:$WorkSpaceName)"
+
+        try {
+            $Json = @{
+                "data"= @{
+                    "type"="vars"
+                    "id"=$Result[$count].id
+                    "attributes"= @{
+                        "key"=$Result[$count].attributes.key
+                        "value"=$Credential.value
+                        "category"="terraform"
+                        "hcl"= $hcl
+                        "sensitive"= $sensitive
+                    }
+                } 
+            } | ConvertTo-Json -Depth 5
+
+            $Patch = @{
+                Uri = "https://app.terraform.io/api/v2/vars/$Result[$count].id"
+                Headers     = @{"Authorization" = "Bearer $Token" }
+                ContentType = 'application/vnd.api+json'
+                Method      = 'Patch'
+                Body        = $Json
+                ErrorAction = 'stop'
+            }
+
+            $Update = (Invoke-RestMethod @Patch).data
+        }
+
+        catch
+            {
+
+                $ErrorID = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.status
+                $Message = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.detail
+                $Exception = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.title
+
+                Write-Error -Exception $Exception -Message $Message -ErrorId $ErrorID
+
+            }
+            finally
+            {
+                If ($Update) {
+                Write-Host "$($MyInvocation.MyCommand.Name): Variable Update complete"
+                }
+
+            }
+
+        $count+=1
     }
 }
 End {
