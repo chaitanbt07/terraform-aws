@@ -53,13 +53,13 @@ Begin {
 Process {
     $Result = (Invoke-RestMethod @GET).data
     $Credentials = Get-ChildItem -Path "env:$Provider*"
-    $count=0
+    #$count=0
     Write-Host "env: $($Credentials.Length)"
-    ForEach($Credential in $Credentials)
+    For($count=0; $count -lt $($Credentials.Length);)
     {
-        Write-Host "$($MyInvocation.MyCommand.Name): Updating $($Credential.Key) variable to Terraform Enterprise Workspace (Name:$WorkSpaceName)"
+        Write-Host "$($MyInvocation.MyCommand.Name): Updating $($Credentials[$count].Key) variable to Terraform Enterprise Workspace (Name:$WorkSpaceName)"
         Write-Host "Variablekey: $($Result[$count].attributes.key)"
-        Write-Host "Variablevalue: $($Credential.value)"
+        Write-Host "Variablevalue: $($Credentials[$count].value)"
         try {
             $Json = @{
                 "data"= @{
@@ -67,7 +67,7 @@ Process {
                     "id"=$Result[$count].id
                     "attributes"= @{
                         "key"=$Result[$count].attributes.key
-                        "value"=$Credential.value
+                        "value"=$Credentials[$count].value
                         "category"="terraform"
                         "hcl"= $hcl
                         "sensitive"= $sensitive
@@ -106,7 +106,7 @@ Process {
 
             }
 
-        $count+=1
+        $count++
     }
 }
 End {
