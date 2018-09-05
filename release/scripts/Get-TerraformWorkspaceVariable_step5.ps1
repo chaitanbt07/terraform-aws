@@ -83,7 +83,7 @@ Process {
                 Body        = $Json
                 ErrorAction = 'stop'
             }
-
+            Write-Host $Patch
             $Update = (Invoke-RestMethod @Patch).data
             Write-Host "Update: $($Update)"
         }
