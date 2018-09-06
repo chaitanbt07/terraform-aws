@@ -53,14 +53,15 @@ Begin {
 Process {
     $Result = (Invoke-RestMethod @GET).data
     $Credentials = Get-ChildItem -Path "env:$Provider*"
-    Write-Host "Credentials: $($Credentials)"
+    Write-Host "Credentials: $($Credentials.key)"
     [string]$resultstring = $Result -join ","
+    Write-Host "resultstring : $($resultstring)"
     ForEach($Credential in $Credentials)
     {
         $count = 0
         Write-Host "Inside For Individual cred: $($Credential.key) = $($Credential.value)"
         write-host "Result Value: $($Result[$count].attributes.key)"
-        $Credential | % {if ($_.key -match $($resultstring))
+        $Credential | % {if ($_.key -match $resultstring)
         {
             Write-Host "Inside If"
                 Write-Host "$($Result[$count].id) = $($Result[$count].attributes.key) for $($Credential.key) = $($Credential.value)"
