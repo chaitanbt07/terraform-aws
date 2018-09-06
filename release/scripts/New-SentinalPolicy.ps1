@@ -26,12 +26,12 @@ Begin {
             "attributes"= @{
                 "name"= "policy1"
                 "enforce"= @{
-                    [
+                    @(
                     @{
                     "path"="policy1.sentinel"
                     "mode"="hard-mandatory"
                     }
-                    ]
+                    )
                 }
                 
             }
