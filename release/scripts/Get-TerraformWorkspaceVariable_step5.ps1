@@ -44,7 +44,7 @@ Begin
 Process 
 {
     $Result = (Invoke-RestMethod @GET).data
-    Write-Host "Results from TFE: $($Result)"
+    Write-Host "Results from TFE: $Result"
     $Credentials = Get-ChildItem -Path "env:$Provider*"
     Write-Host "Results key from Bamboo Variable: $($Credentials.key)"
     foreach ($key in $Result) {
