@@ -51,8 +51,8 @@ Begin {
     
 }
 Process {
-    $Result = Invoke-RestMethod @GET
-    return $Result.data
+    $Result = (Invoke-RestMethod @GET).data
+    $Result
     $Credentials = Get-ChildItem -Path "env:$Provider*"
     Write-Host "Results: $($Result.attributes.key)"
     Write-Host "Credentials: $($Credentials.key)"
@@ -63,10 +63,11 @@ Process {
         $count = 0
         Write-Host "Inside For Individual cred: $($Credential.key) = $($Credential.value)"
         write-host "Result Value: $($Result[$count].attributes.key)"
-        $Credential | % {if ($_.key -match $Result.attributes.key)
+        $Result | % {if ($_attributes.key -match $Result.attributes.key)
         {
             Write-Host "Inside If"
-                Write-Host "$($Result[$count].id) = $($Result[$count].attributes.key) for $($Credential.key) = $($Credential.value)"
+	    write-host "$_.key"
+            Write-Host "$($Result[$count].id) = $($Result[$count].attributes.key) for $($Credential.key) = $($Credential.value)"
             try {
                 write-host "Inside try"
                 $Json = @{
