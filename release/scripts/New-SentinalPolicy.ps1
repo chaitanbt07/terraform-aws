@@ -11,7 +11,7 @@ Param
 
     #Token
     [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, 
-        Position = 3)]
+        Position = 2)]
     $Token
 
 )
@@ -27,12 +27,12 @@ Begin {
                 "enforce" = @{
                     [
                     @{
-                    "path" = "policy1.sentinel",
+                    "path" = "policy1.sentinel"
                     "mode" = "hard-mandatory"
                     }
-                    ],
-                },
-                "name": "policy1",
+                    ]
+                }
+                "name"= "policy1"
             },
             "type"="policies"
         }
