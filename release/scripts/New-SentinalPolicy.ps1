@@ -22,19 +22,19 @@ Begin {
     
     $Json = @{
         "data" = @{
-            
-            "attributes" = @{
-                "enforce" = @{
-                    [
+            "type"="policies"
+            "attributes"= @{
+                "name"= "policy1"
+                "enforce"= @{
+                    @[
                     @{
-                    "path" = "policy1.sentinel"
-                    "mode" = "hard-mandatory"
+                    "path"="policy1.sentinel"
+                    "mode"="hard-mandatory"
                     }
                     ]
                 }
-                "name"= "policy1"
-            },
-            "type"="policies"
+                
+            }
         }
     }
 
