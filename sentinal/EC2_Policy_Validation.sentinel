@@ -1,0 +1,71 @@
+import "tfplan"
+
+mandatory_tags = [
+  "CostCenter", 
+  "Owner",
+]
+
+# Get all AWS instances contained in all modules being used
+get_aws_instances = func() {
+    instances = []
+    for tfplan.module_paths as path {
+        instances += values(tfplan.module(path).resources.aws_instance) else []
+    }
+    return instances
+}
+    
+aws_instances = get_aws_instances()
+
+print("AWS instances: ", aws_instances)
+
+# Instance tag rule
+instance_tags = rule {
+    all aws_instances as _, instances {
+    	all instances as index, r {
+            all mandatory_tags as t {
+                r.applied.tags contains t
+            }
+        }
+    }
+}
+  
+if instance_tags {
+  print("EC2 Tag validation is successfull") } else { print("EC2 Tag validation is not successfull") }
+
+# Allowed Types
+allowed_types = [
+  "t2.small",
+  "t2.medium",
+  "t2.large",
+]
+
+# Rule to restrict instance types
+instance_type_allowed = rule {
+    all aws_instances as _, instances {
+      all instances as index, r {
+  	   r.applied.instance_type in allowed_types
+      }
+    }
+}
+
+if instance_type_allowed {
+  print("Instance Types check is successfull;") } else { print("Instance type check is not successfull") } 
+  
+allowed_ami = [
+    "ami-00e17d1165b9dd3ec",
+]
+
+ami_check = rule {
+    all aws_instances as _, instances {
+      all instances as index, r {
+  	   r.applied.ami in allowed_ami
+      }
+    }
+}
+
+if ami_check {
+  print("AMI validation check is successfull;") } else { print("AMI validation check is not successfull") }
+
+main = rule {
+    (instance_tags and instance_type_allowed and ami_check) else true
+}

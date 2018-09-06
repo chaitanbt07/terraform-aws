@@ -1,0 +1,30 @@
+import "tfplan"
+import "tfconfig"
+
+elb_resources = func() {
+    elb = []
+    for tfplan.module_paths as path {
+        elb += values(tfplan.module(path).resources.aws_elb) else []
+    }
+    return elb
+}
+
+elb = elb_resources()
+
+print("Elastic Load Balancing Properties: ", elb)
+  
+cross_zone_load_balancing = rule  {
+  all elb as _, instances {
+      all instances as index, r {
+        r.applied.cross_zone_load_balancing == true 
+      }
+   }
+}
+
+if cross_zone_load_balancing is true {
+  print("Policy validation successful; cross_zone_load_balancing is enabled") } else { print("Policy Validation failure; cross_zone_load_balancing is disabled") }
+  
+# Main rule
+main = rule {
+    (cross_zone_load_balancing) else true
+}

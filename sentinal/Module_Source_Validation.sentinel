@@ -1,0 +1,13 @@
+import "tfconfig"
+import "strings"
+
+check_module_source = func() {
+  private = ""
+  for tfconfig.modules as name {
+    private = strings.has_prefix(tfconfig.modules[name].source, "app.terraform.io")
+    print("supported:", tfconfig.modules[name].source)
+    }
+  return private
+}
+
+main = rule { (check_module_source()) else true }

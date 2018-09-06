@@ -1,0 +1,37 @@
+import "tfplan"
+# Get all AWS ebs contained in all modules being used
+get_aws_ebs = func() {
+    ebs = []
+    for tfplan.module_paths as path {
+        ebs += values(tfplan.module(path).resources.aws_ebs_volume) else []
+    }
+    return ebs
+}
+
+get_ebs = get_aws_ebs()
+print("EBS details: ", get_ebs)
+
+ebs_encryption_check = rule {
+    all get_ebs as name, instances {
+        all instances as index, r {
+            r.applied.encrypted == true
+        }
+    } 
+}
+
+if ebs_encryption_check {
+    print("EBS Encryption check is enabled; Policy validation is successful") } else { print("EBS Encryption is disabled; Policy validation is not successful.")}
+
+ 
+allocated_storage_check = rule {
+    all get_ebs as _, instances {
+        all instances as index, r {
+            (r.applied.size else 0) < string(35)
+        }
+  }
+}
+
+if allocated_storage_check {
+    print("EBS Storage is within the range; Policy validation is successful") } else { print("EBS Storage is out of permitted range; Policy validation is not successful") }
+  
+main = rule { (ebs_encryption_check and allocated_storage_check) else true }

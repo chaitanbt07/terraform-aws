@@ -1,0 +1,100 @@
+import "tfplan"
+
+
+# Get all AWS RDS from all modules
+get_rds = func() {
+    rds = []
+    for tfplan.module_paths as path {
+        rds += values(tfplan.module(path).resources.aws_db_instance) else []
+    }
+    return rds
+}
+
+rds = get_rds()
+
+print("RDS created: ", rds)
+
+rds_copy_tag_check = rule {
+    all rds as name, instances {
+        all instances as index, r {
+            r.applied.copy_tags_to_snapshot == true
+        }
+    } 
+}
+
+if rds_copy_tag_check is true {
+    print("RDS Copy Tags to Snapshot Policy validation is successful") } else { print("RDS Copy Tags to Snapshot Policy validation is not successful") }
+
+rds_multi_az_check = rule {
+    all rds as name, instances {
+        all instances as index, r {
+            r.applied.multi_az == true
+        }
+    } 
+}
+
+if rds_multi_az_check is true {
+    print("RDS multi_az property is set to true; Policy validation is successful") } else { print("RDS multi_az property is set to false; Policy validation is not successful") }
+
+external_access = rule {
+    all rds as name, instances {
+        all instances as index, r {
+            r.applied.publicly_accessible == false
+        }
+    }
+}
+
+if external_access {
+    print("External access to RDS is disabled; Policy validation is successful") } else { print("External access to RDS is enabled; Policy validation is not successful") }
+
+# Allowed Instance types
+allowed_types = [
+    "db.t2.small",
+]
+
+db_instance_type = rule {
+    all rds as name, instances {
+        all instances as index, r {
+            r.applied.instance_class in allowed_types
+        }
+    }
+}
+
+if db_instance_type {
+    print("DB Instance Type is within the allowed types; Policy validation is successful") } else { print("DB Instance Type is not within the allowed types; Policy validation is not successful") }
+
+final_snapshot_check = rule {
+    all rds as name, instances {
+        all instances as index, r {
+            r.applied.skip_final_snapshot == true
+        }
+    }
+}
+
+if final_snapshot_check {
+    print("Skipping of DB final snapshot is enabled; Policy validation is successful") } else { print("Skipping of DB final snapshot is disabled; Policy validation is not successful") }
+
+allocated_storage_check = rule {
+    all rds as _, instances {
+        all instances as index, r {
+            (r.applied.allocated_storage else 0) < string(26)
+        }
+  }
+}
+
+if allocated_storage_check {
+    print("Allocated storage validation is passed;") } else { print("Allocated storage is exceed the max value;") }
+
+
+storage_encryption_check = rule {
+    all rds as _, instances {
+        all instances as index, r {
+            r.applied.storage_encrypted == true
+        }
+  }
+}
+
+if storage_encryption_check {
+    print("Storage Encryption validation is passed;") } else { print("Storage Encryption validation is failed;") }
+
+main = rule { (storage_encryption_check and allocated_storage_check and external_access and rds_multi_az_check and rds_copy_tag_check and db_instance_type and final_snapshot_check) else true}
