@@ -26,7 +26,7 @@ Begin {
             "attributes"= @{
                 "name"= "policy1"
                 "enforce"= @{
-                    @[
+                    [
                     @{
                     "path"="policy1.sentinel"
                     "mode"="hard-mandatory"
@@ -36,7 +36,7 @@ Begin {
                 
             }
         }
-    }
+    } | ConvertTo-Json -Depth 5
 
     $Json
 
