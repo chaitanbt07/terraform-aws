@@ -14,20 +14,19 @@ Param
         Position = 1)]
     $WorkSpaceName,
 
-    [Parameter(Mandatory=$true,
-                   ValueFromPipelineByPropertyName=$true,
-                   Position=2)]
+    [Parameter(Mandatory = $true,
+        ValueFromPipelineByPropertyName = $true,
+        Position = 2)]
     $Provider,
 
     #Token
-	[Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, 
-	Position=3)]
-	$Token
+    [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, 
+        Position = 3)]
+    $Token
 
 )
 
-Begin 
-{
+Begin {
 
     Write-Host "$($MyInvocation.MyCommand.Name): Script execution started: Getting Variables from Workspace"
 
@@ -41,8 +40,7 @@ Begin
     
 }
 
-Process 
-{
+Process {
     $Result = (Invoke-RestMethod @GET).data
     Write-Host "Results from TFE: $Result"
     $Credentials = Get-ChildItem -Path "env:$Provider*"
@@ -56,19 +54,34 @@ Process
             if ($keyname -match $credkey) {
                 Write-Host "Inside If:****"
                 Write-Host "Result key: $($keyname) and Credentials key: $($credkey) matches"
+                $hcl = $false
+                $sensitive = $true
                 $Json = @{
                     "data" = @{
                         "type"       = "vars"
                         "id"         = $keyid
                         "attributes" = @{
-                            "key"      = $keyname
-                            "value"    = $credvalue
-                            "category" = "terraform"
+                            "key"       = $keyname
+                            "value"     = $credvalue
+                            "category"  = "terraform"
+                            "hcl"       = $hcl
+                            "sensitive" = $sensitive
                         }
                     }
                 } | ConvertTo-Json
-                Write-Host "If condition Json"
+                Write-Host "if condition Json"
                 $Json
+
+                $Patch = @{
+                    Uri         = "https://app.terraform.io/api/v2/vars/$($keyid)"
+                    Headers     = @{"Authorization" = "Bearer $Token" }
+                    ContentType = 'application/vnd.api+json'
+                    Method      = 'Patch'
+                    Body        = $Json
+                    ErrorAction = 'stop'
+                }
+                $Update = (Invoke-RestMethod @Patch).data
+                
             }
             elseif ($($provider + "_" + $keyname) -match $credkey) {
                 Write-Host "Inside elseif:****"
@@ -86,6 +99,16 @@ Process
                 } | ConvertTo-Json
                 Write-Host "ElseIf condition Json"
                 $Json
+
+                $Patch = @{
+                    Uri         = "https://app.terraform.io/api/v2/vars/$($keyid)"
+                    Headers     = @{"Authorization" = "Bearer $Token" }
+                    ContentType = 'application/vnd.api+json'
+                    Method      = 'Patch'
+                    Body        = $Json
+                    ErrorAction = 'stop'
+                }
+                $Update = (Invoke-RestMethod @Patch).data
             }
         }
         
@@ -93,6 +116,5 @@ Process
 }
 End {
 
-    Write-Host "$($MyInvocation.MyCommand.Name): Script execution complete"
-
+    Write-Host "$($MyInvocation.MyCommand.Name): Script execution complete."
 }

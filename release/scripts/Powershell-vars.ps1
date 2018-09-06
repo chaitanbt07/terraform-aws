@@ -44,7 +44,7 @@ Begin
 Process 
 {
     $Result = (Invoke-RestMethod @GET).data
-    Write-Host "Results from TFE: $($Results)"
+    Write-Host "Results from TFE: $Result"
     $Credentials = Get-ChildItem -Path "env:$Provider*"
     Write-Host "Results key from Bamboo Variable: $($Credentials.key)"
     foreach ($key in $Result) {
@@ -54,6 +54,39 @@ Process
             $credkey = $cred.key
             $credvalue = $cred.value
             if ($keyname -match $credkey) {
+                Write-Host "Inside If:****"
+                Write-Host "Result key: $($keyname) and Credentials key: $($credkey) matches"
+                $hcl = $false
+                $sensitive = $true
+                $Json = @{
+                    "data" = @{
+                        "type"       = "vars"
+                        "id"         = $keyid
+                        "attributes" = @{
+                            "key"      = $keyname
+                            "value"    = $credvalue
+                            "category" = "terraform"
+                            "hcl" = $hcl
+                            "sensitive" = $sensitive
+                        }
+                    }
+                } | ConvertTo-Json
+                Write-Host "if condition Json"
+                $Json
+
+                $Patch = @{
+                Uri = "https://app.terraform.io/api/v2/vars/$($keyid)"
+                Headers     = @{"Authorization" = "Bearer $Token" }
+                ContentType = 'application/vnd.api+json'
+                Method      = 'Patch'
+                Body        = $Json
+                ErrorAction = 'stop'
+            }
+                $Update = (Invoke-RestMethod @Patch).data
+                
+            }
+            elseif ($($provider + "_" + $keyname) -match $credkey) {
+                Write-Host "Inside elseif:****"
                 Write-Host "Result key: $($keyname) and Credentials key: $($credkey) matches"
                 $Json = @{
                     "data" = @{
@@ -66,7 +99,18 @@ Process
                         }
                     }
                 } | ConvertTo-Json
+                Write-Host "ElseIf condition Json"
                 $Json
+
+                $Patch = @{
+                    Uri         = "https://app.terraform.io/api/v2/vars/$($keyid)"
+                    Headers     = @{"Authorization" = "Bearer $Token" }
+                    ContentType = 'application/vnd.api+json'
+                    Method      = 'Patch'
+                    Body        = $Json
+                    ErrorAction = 'stop'
+                }
+                $Update = (Invoke-RestMethod @Patch).data
             }
         }
         
@@ -74,6 +118,5 @@ Process
 }
 End {
 
-    Write-Host "$($MyInvocation.MyCommand.Name): Script execution complete"
-
+    Write-Host "$($MyInvocation.MyCommand.Name): Script execution complete."
 }
