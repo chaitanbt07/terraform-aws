@@ -41,10 +41,12 @@ Begin {
 }
 
 Process {
+    try {
+        
     $Result = (Invoke-RestMethod @GET).data
-    Write-Host "Results from TFE: $Result"
+    
     $Credentials = Get-ChildItem -Path "env:$Provider*"
-    Write-Host "Results key from Bamboo Variable: $($Credentials.key)"
+    
     foreach ($key in $Result) {
         $keyid = $key.id
         $keyname = $key.attributes.key
@@ -52,8 +54,6 @@ Process {
             $credkey = $cred.key
             $credvalue = $cred.value
             if ($keyname -match $credkey) {
-                Write-Host "Inside If:****"
-                Write-Host "Result key: $($keyname) and Credentials key: $($credkey) matches"
                 $hcl = $false
                 $sensitive = $true
                 $Json = @{
@@ -69,7 +69,7 @@ Process {
                         }
                     }
                 } | ConvertTo-Json
-                Write-Host "if condition Json"
+                
                 $Json
 
                 $Patch = @{
@@ -84,8 +84,7 @@ Process {
                 
             }
             elseif ($($provider + "_" + $keyname) -match $credkey) {
-                Write-Host "Inside elseif:****"
-                Write-Host "Result key: $($keyname) and Credentials key: $($credkey) matches"
+                
                 $Json = @{
                     "data" = @{
                         "type"       = "vars"
@@ -97,7 +96,7 @@ Process {
                         }
                     }
                 } | ConvertTo-Json
-                Write-Host "ElseIf condition Json"
+                
                 $Json
 
                 $Patch = @{
@@ -109,9 +108,24 @@ Process {
                     ErrorAction = 'stop'
                 }
                 $Update = (Invoke-RestMethod @Patch).data
+                }
             }
-        }
         
+        }
+    }
+
+    catch {
+        $ErrorID = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.status
+        $Message = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.detail
+        $Exception = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.title
+
+        Write-Error -Exception $Exception -Message $Message -ErrorId $ErrorID
+    }
+
+    finally {
+            If ($Result -and $Update) {
+                Write-Host "$($MyInvocation.MyCommand.Name): Variable Update complete"
+        }
     }
 }
 End {
