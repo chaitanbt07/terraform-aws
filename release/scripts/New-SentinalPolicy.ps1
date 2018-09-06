@@ -25,15 +25,13 @@ Begin {
             "type"="policies"
             "attributes"= @{
                 "name"= "policy1"
-                "enforce"= @{
-                    @(
+                "enforce"= @(
                     @{
                     "path"="policy1.sentinel"
                     "mode"="hard-mandatory"
                     }
                     )
-                }
-                
+            
             }
         }
     } | ConvertTo-Json -Depth 5
