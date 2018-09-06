@@ -11,7 +11,7 @@ Param
 
     #Token
     [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, 
-        Position = 2)]
+        Position = 1)]
     $Token
 
 )
