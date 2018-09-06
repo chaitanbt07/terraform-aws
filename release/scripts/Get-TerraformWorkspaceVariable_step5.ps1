@@ -54,6 +54,7 @@ Process
             $credkey = $cred.key
             $credvalue = $cred.value
             if ($keyname -match $credkey) {
+                Write-Host "Inside If:****"
                 Write-Host "Result key: $($keyname) and Credentials key: $($credkey) matches"
                 $Json = @{
                     "data" = @{
@@ -66,6 +67,24 @@ Process
                         }
                     }
                 } | ConvertTo-Json
+                Write-Host "If condition Json"
+                $Json
+            }
+            elseif ($($provider + "_" + $keyname) -match $credkey) {
+                Write-Host "Inside elseif:****"
+                Write-Host "Result key: $($keyname) and Credentials key: $($credkey) matches"
+                $Json = @{
+                    "data" = @{
+                        "type"       = "vars"
+                        "id"         = $keyid
+                        "attributes" = @{
+                            "key"      = $keyname
+                            "value"    = $credvalue
+                            "category" = "terraform"
+                        }
+                    }
+                } | ConvertTo-Json
+                Write-Host "ElseIf condition Json"
                 $Json
             }
         }
