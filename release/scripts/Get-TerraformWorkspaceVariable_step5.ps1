@@ -52,7 +52,7 @@ Begin {
 }
 Process {
     $Result = Invoke-RestMethod @GET
-    return $Result
+    return $Result.data
     $Credentials = Get-ChildItem -Path "env:$Provider*"
     Write-Host "Results: $($Result.attributes.key)"
     Write-Host "Credentials: $($Credentials.key)"
