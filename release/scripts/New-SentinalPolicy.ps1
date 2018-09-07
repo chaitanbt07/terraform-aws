@@ -32,7 +32,7 @@ Process {
     $Policies = @(Get-ChildItem $Path)
     New-Item ./TFE_POLICYID.txt -ItemType file
 	
-    foreach ($Policy in $Policies) {
+    foreach ($Policy in $Policies.name) {
 
         try {
 
@@ -40,10 +40,10 @@ Process {
                 "data" = @{
                     "type"       = "policies"
                     "attributes" = @{
-                        "name"    = ($Policy).basename
+                        "name"    = $Policy.Replace(".sentinel", "")
                         "enforce" = @(
                             @{
-                                "path" = $Policy.name
+                                "path" = $Policy
                                 "mode" = "soft-mandatory"
                             }
                         )
@@ -64,7 +64,7 @@ Process {
 	
     
             $Result = (Invoke-RestMethod @Post).data
-            Write-Output "$($Policy.basename)=$($Result.id)" |out-file -Append ./TFE_POLICYID.txt
+            Write-Output "$Policy.Replace(".sentinel", "")=$($Result.id)" |out-file -Append ./TFE_POLICYID.txt
             Get-ChildItem
             Return $Result
         }
@@ -77,7 +77,7 @@ Process {
         }
 	
         If ($ErrorID -eq 422) {
-            Write-Host "$($MyInvocation.MyCommand.Name): $Message. Getting Policy ID for existing policy ($Policy).basename."
+            Write-Host "$($MyInvocation.MyCommand.Name): $Message. Getting Policy ID for existing policy $Policy.Replace(".sentinel", "")."
 
             try {
                 $Get = @{
@@ -91,7 +91,7 @@ Process {
 
                 $Existing = (Invoke-RestMethod @Get).data
 
-                Write-Output "$($Policy.basename)=$($Existing.id)" |out-file -Append ./TFE_POLICYID.txt 
+                Write-Output "$Policy.Replace(".sentinel", "")=$($Existing.id)" |out-file -Append ./TFE_POLICYID.txt 
                 Get-ChildItem
                 Return $Existing
             }
