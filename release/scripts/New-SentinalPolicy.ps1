@@ -8,7 +8,7 @@ Param
         Position = 0)]
     $OrganizationName,
 	
-	#Path
+    #Path
     [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, 
         Position = 1)]
     $Path,
@@ -29,86 +29,87 @@ Begin {
 
 Process {
 
-	$Policies = @(Get-ChildItem $Path)
-	New-Item ./TFE_POLICYID.txt -ItemType file
+    $Policies = @(Get-ChildItem $Path)
+    New-Item ./TFE_POLICYID.txt -ItemType file
 	
-	foreach ($Policy in $Policies.name) {
-	write-host "For Policy: $Policy"
-	try {
-
-	$Json = @{
-        "data" = @{
-            "type"="policies"
-            "attributes"= @{
-                "name"= $Policy.Replace(".sentinel", "")
-                "enforce"= @(
-                    @{
-                    "path"=$Policy
-                    "mode"="soft-mandatory"
-                    }
-                    )
-            }
-        }
-    } | ConvertTo-Json -Depth 5
-
-    $Json
-
-    $Post = @{
-        Uri = "https://app.terraform.io/api/v2/organizations/$OrganizationName/policies"
-        Headers     = @{"Authorization" = "Bearer $Token" }
-        ContentType = 'application/vnd.api+json'
-        Method      = 'Post'
-        Body        = $Json
-        ErrorAction = 'stop'
-    }
-	
-    
-        $Result = (Invoke-RestMethod @Post).data
-        Write-Output "$($Policy.Replace(".sentinel", ""))=$($Result.id)" |out-file -Append ./TFE_POLICYID.txt
-        Get-ChildItem
-        Return $Result
-	    
-
-		If ($ErrorID -eq 422) {
-        Write-Host "$($MyInvocation.MyCommand.Name): $Message. Getting Policy ID for existing policy $($Policy.Replace(".sentinel", ""))."
-
+    foreach ($Policy in $Policies.name) {
+        write-host "For Policy: $Policy"
+        $PolicyName = $Policy.Replace(".sentinel", "")
         try {
-            $Get = @{
 
+            $Json = @{
+                "data" = @{
+                    "type"       = "policies"
+                    "attributes" = @{
+                        "name"    = $PolicyName
+                        "enforce" = @(
+                            @{
+                                "path" = $Policy
+                                "mode" = "soft-mandatory"
+                            }
+                        )
+                    }
+                }
+            } | ConvertTo-Json -Depth 5
+
+            $Json
+
+            $Post = @{
                 Uri         = "https://app.terraform.io/api/v2/organizations/$OrganizationName/policies"
                 Headers     = @{"Authorization" = "Bearer $Token" }
                 ContentType = 'application/vnd.api+json'
-                Method      = 'Get'
+                Method      = 'Post'
+                Body        = $Json
                 ErrorAction = 'stop'
             }
+	
+    
+            $Result = (Invoke-RestMethod @Post).data
+            Write-Output "$PolicyName=$($Result.id)" |out-file -Append ./TFE_POLICYID.txt
+            Get-ChildItem
+            Return $Result
+	    
 
-            $Existing = (Invoke-RestMethod @Get).data
+            If ($ErrorID -eq 422) {
+                Write-Host "$($MyInvocation.MyCommand.Name): $Message. Getting Policy ID for existing policy $PolicyName."
 
-            Write-Output "$($Policy.Replace(".sentinel", ""))=$($Existing.id)" |out-file -Append ./TFE_POLICYID.txt 
-	        Get-ChildItem
-            Return $Existing
+                try {
+                    $Get = @{
+
+                        Uri         = "https://app.terraform.io/api/v2/organizations/$OrganizationName/policies"
+                        Headers     = @{"Authorization" = "Bearer $Token" }
+                        ContentType = 'application/vnd.api+json'
+                        Method      = 'Get'
+                        ErrorAction = 'stop'
+                    }
+
+                    $Existing = (Invoke-RestMethod @Get).data
+
+                    Write-Output "$PolicyName=$Existing.id" |out-file -Append ./TFE_POLICYID.txt 
+                    Get-ChildItem
+                    Return $Existing
+                }
+                catch {
+                    $ErrorID = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.status
+                    $Message = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.detail
+                    $Exception = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.title
+			
+                    Write-Host "Getting Existing Policy ID"
+
+                    Write-Error -Exception $Exception -Message $Message -ErrorId $ErrorID
+                }
+            }
         }
         catch {
             $ErrorID = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.status
             $Message = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.detail
             $Exception = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.title
-			
-			Write-Host "Getting Existing Policy ID"
 
             Write-Error -Exception $Exception -Message $Message -ErrorId $ErrorID
         }
-    }
-    }
-    catch {
-        $ErrorID = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.status
-        $Message = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.detail
-        $Exception = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.title
-
-        Write-Error -Exception $Exception -Message $Message -ErrorId $ErrorID
-    }
 	
 	
-}
+    }
 }
 End {
 
