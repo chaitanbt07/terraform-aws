@@ -85,7 +85,7 @@ Process {
             $Message = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.detail
             $Exception = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.title
 
-            Write-Error -Exception $Exception -Message $Message -ErrorId $ErrorID
+            Write-Error -Message $Message
 
         }
     }
