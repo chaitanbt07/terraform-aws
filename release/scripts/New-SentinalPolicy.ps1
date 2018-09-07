@@ -64,6 +64,11 @@ Process {
             }
             $Post
 
+            $Result = (Invoke-RestMethod @Post).data
+            Write-Output "$PolicyName=$($Result.id)" |out-file -Append ./TFE_POLICYID.txt
+            Get-ChildItem
+            Write-Host $Result
+
         }
         catch {
             $ErrorID = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.status
