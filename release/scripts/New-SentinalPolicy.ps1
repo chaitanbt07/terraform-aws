@@ -8,27 +8,43 @@ Param
         ValueFromPipelineByPropertyName = $true,
         Position = 0)]
     $OrganizationName,
+	
+	#Path
+    [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, 
+        Position = 1)]
+    $Path
 
     #Token
     [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, 
-        Position = 1)]
+        Position = 2)]
     $Token
 
 )
 
 Begin {
 
+
     Write-Host "$($MyInvocation.MyCommand.Name): Script execution started"
     
-    $Json = @{
+}
+
+Process {
+
+	$Policies = @(Get-ChildItem $Path)
+	
+	foreach ($Policy in $Policies) {
+
+	try {
+
+	$Json = @{
         "data" = @{
             "type"="policies"
             "attributes"= @{
-                "name"= "policy1"
+                "name"= ($Policy).basename
                 "enforce"= @(
                     @{
-                    "path"="policy1.sentinel"
-                    "mode"="hard-mandatory"
+                    "path"=$Policy.name
+                    "mode"="soft-mandatory"
                     }
                     )
             
@@ -46,10 +62,8 @@ Begin {
         Body        = $Json
         ErrorAction = 'stop'
     }
-}
-
-Process {
-    try {
+	
+    
         $Result = (Invoke-RestMethod @Post).data
         Write-Output "TFE_POLICY_ID=$($Result.id)" |out-file ./TFE_POLICYID.txt
         Get-ChildItem
@@ -67,6 +81,7 @@ Process {
             Write-Host "$($MyInvocation.MyCommand.Name): Script execution complete"
         }
     }
+}
 }
 End {
 
