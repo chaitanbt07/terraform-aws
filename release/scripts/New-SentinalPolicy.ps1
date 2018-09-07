@@ -77,7 +77,7 @@ Process {
         }
 	
         If ($ErrorID -eq 422) {
-            Write-Host "$($MyInvocation.MyCommand.Name): $Message. Getting Policy ID."
+            Write-Host "$($MyInvocation.MyCommand.Name): $Message. Getting Policy ID for existing policy ($Policy).basename."
 
             try {
                 $Get = @{
@@ -89,11 +89,11 @@ Process {
                     ErrorAction = 'stop'
                 }
 
-                $Result = (Invoke-RestMethod @Get).data
+                $Existing = (Invoke-RestMethod @Get).data
 
-                Write-Output "$($Policy.basename)=$($Result.id)" |out-file -Append ./TFE_POLICYID.txt 
+                Write-Output "$($Policy.basename)=$($Existing.id)" |out-file -Append ./TFE_POLICYID.txt 
                 Get-ChildItem
-                Return $Result
+                Return $Existing
             }
             catch {
                 $ErrorID = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.status
