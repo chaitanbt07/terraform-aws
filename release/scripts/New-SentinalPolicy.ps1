@@ -75,8 +75,11 @@ Process {
                 InFile = $Policy
             }
 
-            $Put
             
+
+            $PushContent = (Invoke-RestMethod @Put).data
+
+            $PushContent
 
         }
         catch {
