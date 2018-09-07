@@ -76,6 +76,44 @@ Process {
             $Exception = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.title
 
             Write-Error -Exception $Exception -Message $Message -ErrorId $ErrorID
+
+            if ($ErrorID -eq 422) {
+                Write-Host "$($MyInvocation.MyCommand.Name): $Message. Updating Policy for existing policy $PolicyName."
+
+                $Json = @{
+                    "data" = @{
+                        "type"       = "policies"
+                        "attributes" = @{
+                            "enforce" = @(
+                                @{
+                                    "path" = $Policy
+                                    "mode" = "soft-mandatory"
+                                }
+                            )
+                        }
+                    }
+                } | ConvertTo-Json -Depth 5
+
+                
+                $Patch = @{
+
+                    Uri         = "https://app.terraform.io/api/v2/policies/$($Result.id)"
+                    Headers     = @{"Authorization" = "Bearer $Token" }
+                    ContentType = 'application/vnd.api+json'
+                    Method      = 'PATCH'
+                    Body        = $Json
+                    ErrorAction = 'stop'
+                }
+
+                $Existing = (Invoke-RestMethod @Patch).data
+
+                Write-Output "$PolicyName"="$Existing.id" |out-file -Append ./TFE_POLICYID.txt
+                Write-Host $Existing
+            }
         }
     }
+}
+End {
+
+    Write-Host "$($MyInvocation.MyCommand.Name): Script execution complete."
 }
