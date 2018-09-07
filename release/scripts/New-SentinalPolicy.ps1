@@ -67,19 +67,18 @@ Process {
             Get-ChildItem
             Write-Host $Result
 
-            Get-Content $Path\$Policy
+            
+            $Put = @{
+                Uri = "https://app.terraform.io/api/v2/policies/$($Result.id)/upload"
+                Headers     = @{"Authorization" = "Bearer $Token" }
+                ContentType = 'application/octet-stream'
+                Method      = 'Put'
+                InFile = "$Path\$Policy"
+            }
 
-            #$Put = @{
-             #   Uri = "https://app.terraform.io/api/v2/policies/$($Result.id)/upload"
-              #  Headers     = @{"Authorization" = "Bearer $Token" }
-              #  ContentType = 'application/octet-stream'
-              #  Method      = 'Put'
-              #  InFile = $Policy
-            #}
+            $PushContent = (Invoke-RestMethod @Put).data
 
-            #$PushContent = (Invoke-RestMethod @Put).data
-
-            #$PushContent
+            $PushContent
 
         }
         catch {
