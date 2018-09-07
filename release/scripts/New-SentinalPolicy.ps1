@@ -54,22 +54,6 @@ Process {
 
             $Json
 
-            $Post = @{
-                Uri         = "https://app.terraform.io/api/v2/organizations/$OrganizationName/policies"
-                Headers     = @{"Authorization" = "Bearer $Token" }
-                ContentType = 'application/vnd.api+json'
-                Method      = 'Post'
-                Body        = $Json
-                ErrorAction = 'stop'
-            }
-	
-    
-            $Result = (Invoke-RestMethod @Post).data
-            Write-Output "$PolicyName=$($Result.id)" |out-file -Append ./TFE_POLICYID.txt
-            Get-ChildItem
-            Return $Result
-	    
-
         }
         catch {
             $ErrorID = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.status
