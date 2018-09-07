@@ -54,6 +54,16 @@ Process {
 
             $Json
 
+            $Post = @{
+                Uri         = "https://app.terraform.io/api/v2/organizations/$OrganizationName/policies"
+                Headers     = @{"Authorization" = "Bearer $Token" }
+                ContentType = 'application/vnd.api+json'
+                Method      = 'Post'
+                Body        = $Json
+                ErrorAction = 'stop'
+            }
+            $Post
+
         }
         catch {
             $ErrorID = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.status
