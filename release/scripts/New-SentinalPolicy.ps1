@@ -64,7 +64,6 @@ Process {
 
             $Result = (Invoke-RestMethod @Post).data
             Write-Output "$PolicyName=$($Result.id)" |out-file -Append ./TFE_POLICYID.txt
-            Get-ChildItem
             Write-Host $Result
 
             
