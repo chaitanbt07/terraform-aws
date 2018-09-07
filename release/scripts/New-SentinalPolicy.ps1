@@ -4,8 +4,7 @@
 Param
 (
 
-    [Parameter(Mandatory = $true,
-        ValueFromPipelineByPropertyName = $true,
+    [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true,
         Position = 0)]
     $OrganizationName,
 	
@@ -31,6 +30,7 @@ Begin {
 Process {
 
 	$Policies = @(Get-ChildItem $Path)
+	New-Item ./TFE_POLICYID.txt -ItemType file
 	
 	foreach ($Policy in $Policies) {
 
@@ -47,7 +47,6 @@ Process {
                     "mode"="soft-mandatory"
                     }
                     )
-            
             }
         }
     } | ConvertTo-Json -Depth 5
@@ -65,7 +64,7 @@ Process {
 	
     
         $Result = (Invoke-RestMethod @Post).data
-        Write-Output "TFE_POLICY_ID=$($Result.id)" |out-file ./TFE_POLICYID.txt
+        Write-Output "$($Policy.name)=$($Result.id)" |out-file -Append ./TFE_POLICYID.txt
         Get-ChildItem
         Return $Result
     }
@@ -74,13 +73,9 @@ Process {
         $Message = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.detail
         $Exception = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.title
 
-        Write-Error -Exception $Exception -Message $Message -ErrorId $ErrorID
+        Write-Error -Exception "Exception" $Exception -Message "Message" $Message -ErrorId "Error" $ErrorID
     }
-    finally {
-        If ($Result) {
-            Write-Host "$($MyInvocation.MyCommand.Name): Script execution complete"
-        }
-    }
+    
 }
 }
 End {
