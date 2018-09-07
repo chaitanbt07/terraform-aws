@@ -28,13 +28,12 @@ Begin {
 }
 
 Process {
-
-    $Policies = @(Get-ChildItem $Path)
+    $Policies = Get-ChildItem $Path | Select-Object Name
     New-Item ./TFE_POLICYID.txt -ItemType file
 	
-    foreach ($Policy in $Policies) {
+    foreach ($Policy in $Policies.Name) {
         write-host "For Policy: $Policy"
-        $Policy = ($Policy.Name).ToString()
+	
         $PolicyName = $Policy.Replace(".sentinel", "")
         try {
 
@@ -79,39 +78,5 @@ Process {
 
             Write-Error -Exception $Exception -Message $Message -ErrorId $ErrorID
         }
-        If ($ErrorID -eq 422) {
-            Write-Host "$($MyInvocation.MyCommand.Name): $Message. Getting Policy ID for existing policy $PolicyName."
-
-            try {
-                $Get = @{
-
-                    Uri         = "https://app.terraform.io/api/v2/organizations/$OrganizationName/policies"
-                    Headers     = @{"Authorization" = "Bearer $Token" }
-                    ContentType = 'application/vnd.api+json'
-                    Method      = 'Get'
-                    ErrorAction = 'stop'
-                }
-
-                $Existing = (Invoke-RestMethod @Get).data
-
-                Write-Output "$PolicyName=$Existing.id" |out-file -Append ./TFE_POLICYID.txt 
-                Get-ChildItem
-                Return $Existing
-            }
-            catch {
-                $ErrorID = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.status
-                $Message = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.detail
-                $Exception = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.title
-			
-                Write-Host "Getting Existing Policy ID"
-
-                Write-Error -Exception $Exception -Message $Message -ErrorId $ErrorID
-            }
-        }
-	
     }
-}
-End {
-
-    Write-Host "$($MyInvocation.MyCommand.Name): Script execution complete."
 }
