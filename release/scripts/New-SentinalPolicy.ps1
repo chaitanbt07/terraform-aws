@@ -64,7 +64,7 @@ Process {
 	
     
             $Result = (Invoke-RestMethod @Post).data
-            Write-Output "$(($Policy).basename)=$($Result.id)" |out-file -Append ./TFE_POLICYID.txt
+            Write-Output "$($Policy.basename)=$($Result.id)" |out-file -Append ./TFE_POLICYID.txt
             Get-ChildItem
             Return $Result
         }
@@ -91,7 +91,7 @@ Process {
 
                 $Result = (Invoke-RestMethod @Get).data
 
-                Write-Output "$(($Policy).basename)=$($Result.id)" |out-file -Append ./TFE_POLICYID.txt 
+                Write-Output "$($Policy.basename)=$($Result.id)" |out-file -Append ./TFE_POLICYID.txt 
                 Get-ChildItem
                 Return $Result
             }
@@ -99,16 +99,12 @@ Process {
                 $ErrorID = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.status
                 $Message = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.detail
                 $Exception = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.title
+			
+                Write-Host "Getting Existing Policy ID"
 
                 Write-Error -Exception $Exception -Message $Message -ErrorId $ErrorID
             }
-            finally {
-                If ($Result) {
-                    Write-Host "$($MyInvocation.MyCommand.Name): Script execution complete"
-                }
-            }
         }
-    
     }
 }
 End {
