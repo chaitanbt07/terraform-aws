@@ -12,7 +12,7 @@ Param
 	#Path
     [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, 
         Position = 1)]
-    $Path
+    $Path,
 
     #Token
     [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true, 
