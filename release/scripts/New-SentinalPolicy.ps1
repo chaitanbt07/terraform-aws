@@ -67,7 +67,7 @@ Process {
             Get-ChildItem
             Write-Host $Result
 
-            Get-Content ./$Policy
+            Get-Content ..\..\$Path\$Policy
 
             #$Put = @{
              #   Uri = "https://app.terraform.io/api/v2/policies/$($Result.id)/upload"
