@@ -29,8 +29,7 @@ Process {
         $Get     = @{
                 Uri         = "https://app.terraform.io/api/v2/organizations/$OrganizationName/policies"
                 Headers     = @{"Authorization" = "Bearer $Token" }
-                ContentType = 'application/vnd.api+json'
-                Method      = 'Get'
+                Method      = 'GET'
                 ErrorAction = 'stop'
             }
 
