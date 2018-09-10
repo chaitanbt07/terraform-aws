@@ -1,6 +1,6 @@
 [CmdletBinding()]
 [Alias()]
-[OutputType([int])]
+[OutputType([object])]
 Param
 (
 
