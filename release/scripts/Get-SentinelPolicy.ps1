@@ -32,25 +32,23 @@ Process {
                 Method      = 'GET'
                 ErrorAction = 'stop'
             }
-
-        Write-Host "Get: $Get"
         $Result = (Invoke-RestMethod @Get).data
-        Write-Host "Result: $Result"
+        
+        foreach ($Res in $Result) {
 
-        Write-Output "$(Result.attributes.name)=$($Result.id)" |out-file -Append ./TFE_POLICYID_GET.txt
-    }
-
+            Write-Host "Writting Policy ID for the Policy: $($Res.attributes.name)...."
+            Write-Output "$($Res.attributes.name) = $($Res.id)" |out-file -Append ./TFE_POLICYID_GET.txt
+            
+        }
+}
     catch {
             $ErrorID = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.status
             $Message = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.detail
             $Exception = ($Error[0].ErrorDetails.Message | ConvertFrom-Json).errors.title
-
             Write-Error -Message $Message
-
         }
 }
 
 End {
-
     Write-Host "$($MyInvocation.MyCommand.Name): Script execution complete."
 }
