@@ -42,7 +42,7 @@
     
         }
 
-        $State = @("applying","canceled","confirmed","discarded","pending","planned","planning","policy_checked","policy_checking","policy_override")
+        $State = @("applying","canceled","confirmed","pending","planned","planning","policy_checked","policy_checking","policy_override")
 
     }
     Process
