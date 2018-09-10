@@ -68,6 +68,7 @@
             {
                 'applied'{ Return 0 }
                 'errored'{ Return 1 }
+                'discarded' { Return 0 }
             }
             
         }
