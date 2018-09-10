@@ -30,11 +30,14 @@ Process {
                 Uri         = "https://app.terraform.io/api/v2/organizations/$OrganizationName/policies"
                 Headers     = @{"Authorization" = "Bearer $Token" }
                 ContentType = 'application/vnd.api+json'
-                Method      = 'GET'
+                Method      = 'Get'
                 ErrorAction = 'stop'
             }
 
+        Write-Host "Get: $Get"
         $Result = (Invoke-RestMethod @Get).data
+        Write-Host "Result: $Result"
+
         Write-Output "$(Result.attributes.name)=$($Result.id)" |out-file -Append ./TFE_POLICYID_GET.txt
     }
 
