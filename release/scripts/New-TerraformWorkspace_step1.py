@@ -31,11 +31,12 @@ def workspace(Organization, WorkSpaceName, Token):
         # Creating a file to append the Workspace information
         f= open("workspace.txt","a+")
         # Initialize POST request
-        result = requests.post(url, json = serilaized, headers = headers)
+        result = requests.post(url, json = serilaized, headers = headers, allow_redirects=False)
         if result.status_code == 422 and result.status_code != 200:
             try:
+                print("\033[93mWorkspace with name " + WorkSpaceName + " already Exists....\033[0m")
                 print("\033[1;32mGetting Workspace Information...\033[1;32m")
-                get_result = requests.get(url, headers = headers)
+                get_result = requests.get(url, headers = headers, allow_redirects=False)
                 loaded_json = (json.loads(get_result.content))['data']
                 for i in loaded_json:
                         if ((i['attributes']['name']) == WorkSpaceName):
@@ -56,7 +57,7 @@ def workspace(Organization, WorkSpaceName, Token):
             f.write("WorkspaceName: " + WorkSpaceName + "\n")
             print('\033[0m')
     except Exception as e:
-        print("\033[1;31mCheck Proxy Settings\033[0m")
+        print("\033[1;31mError: Check Proxy Settings\033[0m")
     finally:
         f.close()
         print("Script Execution Completed")
