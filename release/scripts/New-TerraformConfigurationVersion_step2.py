@@ -32,7 +32,6 @@ def configversion(workspaceid, token):
         # Initialize POST request
         result = requests.post(url, json = serilaized, headers = headers, allow_redirects=False)
         loaded_json = (json.loads(result.content))['data']
-        #for i in loaded_json:
         print("\033[1;32mConfigID: " + loaded_json['id'])
         f.write("ConfigID: " + loaded_json['id'] +'\n')
         print("upload-url: " + loaded_json['attributes']['upload-url'])
