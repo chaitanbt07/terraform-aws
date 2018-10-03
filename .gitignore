@@ -10,3 +10,4 @@
 *.tfvars
 *.github
 *.txt
+*.tar.gz
