@@ -5,4 +5,4 @@ print(myenv)
 #print(str(os.environ['aws']))
 a = subprocess.Popen("env | grep -i 'AWS*'", shell=True, stdout=subprocess.PIPE).stdout
 b = a.read()
-b.decode("utf-8")
+print(b.decode("utf-8"))
