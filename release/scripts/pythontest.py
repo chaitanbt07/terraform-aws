@@ -6,4 +6,6 @@ print(myenv)
 #print(str(os.environ['aws']))
 a = subprocess.Popen("env | grep 'bamboo_" + sys.argv[1] + "_*'", shell=True, stdout=subprocess.PIPE).stdout
 b = a.read()
-print(b.decode("utf-8"))
+b = b.decode("utf-8")
+print(type(b))
+
