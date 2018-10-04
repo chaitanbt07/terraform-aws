@@ -1,2 +1,2 @@
 import os
-print os.environ['aws']
+print(os.environ['aws'])
