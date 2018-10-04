@@ -2,6 +2,7 @@ import requests
 import json
 import sys
 import os
+import subprocess
 
 def workspacevariable(WorkSpaceID, Provider, Token):
     if os.name == 'nt': 
@@ -10,6 +11,8 @@ def workspacevariable(WorkSpaceID, Provider, Token):
         os.system("clear")
     print("\n##########################################################################################\n")
     print("Script Execution Started")
+    a = subprocess.Popen("env | grep 'bamboo_'" + Provider + "'_*'", shell=True, stdout=subprocess.PIPE).stdout
+
 
 def main():
     workspaceid = sys.argv[1]
