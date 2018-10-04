@@ -1,2 +1,4 @@
 import os
-print(os.environ['aws'])
+myenv = os.getenv('Path', default="Sample")
+print(myenv)
+print(os.environ['aws_*'])
