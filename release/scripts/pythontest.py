@@ -16,6 +16,9 @@ for i in b:
     c.append(i.split("="))
 for i in c:
     env_vars[i[0]] = i[1]
-    print(env_vars[i[0]].replace('bamboo_, ''))
+    #print(env_vars[i[0]].replace('bamboo_, ''))
+for k in env_vars.keys():
+    print(k.replace('bamboo_', ''))
+    
 
 print(env_vars)
