@@ -8,8 +8,10 @@ a = subprocess.Popen("env | grep 'bamboo_" + sys.argv[1] + "_*'", shell=True, st
 b = a.read()
 b = b.decode("utf-8")
 b = b.split("\n")
+b.pop()
+#print(b)
 c =[]
-env_vars ={}
+env_vars = {}
 for i in b:
     c.append(i.split("="))
 for i in c:
