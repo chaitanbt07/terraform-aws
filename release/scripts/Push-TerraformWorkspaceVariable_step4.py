@@ -11,6 +11,7 @@ def workspacevariable(WorkSpaceID="daefefae", Provider="aws", Token="122121212rw
         os.system("clear")
     print("\n##########################################################################################\n")
     print("Script Execution Started")
+    #a = subprocess.Popen("env | grep 'bamboo_" + Provider + "_*'", shell=True, stdout=subprocess.PIPE).stdout
     a = subprocess.Popen("env | grep 'bamboo_" + Provider + "_*'", shell=True, stdout=subprocess.PIPE).stdout
     b = a.read()
     b = b.decode("utf-8")
