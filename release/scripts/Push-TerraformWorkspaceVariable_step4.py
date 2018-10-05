@@ -16,6 +16,7 @@ def workspacevariable(WorkSpaceID="daefefae", Provider="aws", Token="122121212rw
     b = b.decode("utf-8")
     b = b.split("\n")
     c =[]
+    env_vars ={}
     for i in b:
         c.append(i.split("="))
     for i in c:
