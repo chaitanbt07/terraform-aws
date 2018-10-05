@@ -28,7 +28,6 @@ def workspacevariable(WorkSpaceID="", Provider="", Token=""):
     except Exception as e:
         print("\033[1;31mError : " + str(e) + "\033[0m")
     #a = subprocess.Popen("env | grep 'bamboo_" + Provider + "_*'", shell=True, stdout=subprocess.PIPE).stdout
-<<<<<<< Updated upstream
     a = subprocess.Popen("env | grep 'bamboo_" + Provider + "_*'", shell=True, stdout=subprocess.PIPE).stdout
     b = a.read()
     b = b.decode("utf-8")
@@ -39,15 +38,9 @@ def workspacevariable(WorkSpaceID="", Provider="", Token=""):
     for i in b:
         c.append(i.split("="))
     for i in c:
-        print(env_vars[i[0]] = i[1])
-    #print(env_vars[0])
+        env_vars[i[0]] = i[1]
 
-    #print(env_vars)
-=======
-    finally:
-        print("Script Execution Completed")
-        print("\n##########################################################################################\n")
->>>>>>> Stashed changes
+    print(env_vars)
 
 def main():
     workspaceid = sys.argv[1]
