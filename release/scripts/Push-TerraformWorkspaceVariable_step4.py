@@ -25,7 +25,7 @@ def workspacevariable(WorkSpaceID="", Provider="", Token=""):
         env_vars[i[0]] = i[1]
         print(env_vars[i[0]].replace('bamboo_', ''))
 
-    print(env_vars)
+    #print(env_vars)
 
 def main():
     workspaceid = sys.argv[1]
