@@ -4,7 +4,7 @@ import sys
 import os
 import subprocess
 
-def workspacevariable(WorkSpaceID="daefefae", Provider="aws", Token="122121212rwr34"):
+def workspacevariable(WorkSpaceID="", Provider="", Token=""):
     if os.name == 'nt': 
         os.system("cls") 
     else: 
