@@ -9,7 +9,7 @@ b = a.read()
 b = b.decode("utf-8")
 b = b.split("\n")
 b.pop()
-print(b)
+#print(b)
 c =[]
 env_vars = {}
 for i in b:
