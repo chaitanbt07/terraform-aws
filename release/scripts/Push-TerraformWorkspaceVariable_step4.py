@@ -4,15 +4,24 @@ import sys
 import os
 import subprocess
 
-def workspacevariable(WorkSpaceID, Provider, Token):
+def workspacevariable(WorkSpaceID="daefefae", Provider="aws", Token="122121212rwr34"):
     if os.name == 'nt': 
         os.system("cls") 
     else: 
         os.system("clear")
     print("\n##########################################################################################\n")
     print("Script Execution Started")
-    a = subprocess.Popen("env | grep 'bamboo_'" + Provider + "'_*'", shell=True, stdout=subprocess.PIPE).stdout
+    a = subprocess.Popen("env | grep 'bamboo_" + Provider + "_*'", shell=True, stdout=subprocess.PIPE).stdout
+    b = a.read()
+    b = b.decode("utf-8")
+    b = b.split("\n")
+    c =[]
+    for i in b:
+        c.append(i.split("="))
+    for i in c:
+        env_vars[i[0]] = i[1]
 
+    print(env_vars)
 
 def main():
     workspaceid = sys.argv[1]
