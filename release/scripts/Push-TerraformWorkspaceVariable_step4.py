@@ -27,7 +27,7 @@ def workspacevariable(WorkSpaceID, Provider, Token):
         print(env_vars)
         for key in env_vars:
             if 'secret' in key:
-                rint("\033[1;32m")
+                print("\033[1;32m")
                 print("key: " + key)
                 f.write(key + "=" + env_vars[key] +'\n')
                 payload = dict(data = dict(attributes = dict(key = key, value = env_vars[key], category =  "terraform", hcl = False, sensitive = True), relationships = dict(workspace = dict(data = dict(id = WorkSpaceID, type = "workspaces")))), type = "vars")
