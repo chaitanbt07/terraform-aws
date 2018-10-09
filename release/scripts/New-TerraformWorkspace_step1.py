@@ -31,7 +31,7 @@ def workspace(Organization, WorkSpaceName, Token):
         # Creating a file to append the Workspace information
         f= open("workspace.txt","a+")
         # Initialize POST request
-        result = requests.post(url, json = serilaized, headers = headers, allow_redirects=False)
+        result = requests.post(url, data = serilaized, headers = headers, allow_redirects=False)
         if result.status_code == 422 and result.status_code != 200:
             try:
                 print("\033[93mWorkspace with name " + WorkSpaceName + " already Exists....\033[0m")
