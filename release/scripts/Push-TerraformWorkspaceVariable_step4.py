@@ -12,6 +12,7 @@ def workspacevariable(WorkSpaceID, Provider, Token):
     print("Script Execution Started")
     try:
     # Getting Envrionment variable from run
+        f= open("variables.txt","a+")
         a = subprocess.Popen("env | grep 'bamboo_" + Provider + "_*'", shell=True, stdout=subprocess.PIPE).stdout
         b = a.read()
         b = b.decode("utf-8")
@@ -26,7 +27,9 @@ def workspacevariable(WorkSpaceID, Provider, Token):
         print(env_vars)
         for key in env_vars:
             if 'secret' in key:
-                print("\033[1;32mkey: " + key)
+                rint("\033[1;32m")
+                print("key: " + key)
+                f.write(key + "=" + env_vars[key] +'\n')
                 payload = dict(data = dict(attributes = dict(key = key, value = env_vars[key], category =  "terraform", hcl = False, sensitive = True), relationships = dict(workspace = dict(data = dict(id = WorkSpaceID, type = "workspaces")))), type = "vars")
     # Creating Header content for POST request
                 headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8" }'
@@ -40,6 +43,7 @@ def workspacevariable(WorkSpaceID, Provider, Token):
                 print('\033[0m')
             else:
                 print("key: " + key)
+                f.write(key + "=" + env_vars[key] +'\n')
                 payload = dict(data = dict(attributes = dict(key = key, value = env_vars[key], category =  "terraform", hcl = True, sensitive = False), relationships = dict(workspace = dict(data = dict(id = WorkSpaceID, type = "workspaces")))), type = "vars")
     # Creating Header content for POST request
                 headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8"}'
@@ -52,6 +56,7 @@ def workspacevariable(WorkSpaceID, Provider, Token):
     except Exception as e:
         print("\033[1;31mError : " + str(e) + "\033[0m")
     finally:
+        f.close()
         print("Script Execution Completed")
         print("\n##########################################################################################\n")
 
