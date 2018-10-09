@@ -46,7 +46,7 @@ def workspace(Organization, WorkSpaceName, Token):
                             f.write("WorkspaceName: " + i['attributes']['name'] +'\n')
                             print('\033[0m')
             except Exception as e:
-                print("\033[1;31mcode failed\033[0m")
+                print("\033[1;31mcode failed :" + str(e) + "\033[0m")
         elif result.status_code == 404:
             print("\033[1;31mError creating workspace; Check the permission and the organization name and settings\033[0m")
         elif result.status_code == 200 or result.status_code == 201:
@@ -57,7 +57,7 @@ def workspace(Organization, WorkSpaceName, Token):
             f.write("WorkspaceName: " + WorkSpaceName + "\n")
             print('\033[0m')
     except Exception as e:
-        print("\033[1;31mError: Check Proxy Settings\033[0m")
+        print("\033[1;31mError: Check Proxy Settings or " + str(e) + "\033[0m")
     finally:
         f.close()
         print("Script Execution Completed")
