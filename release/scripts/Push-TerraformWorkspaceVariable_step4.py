@@ -3,7 +3,7 @@ import subprocess
 import sys, json
 import requests
 
-def workspacevariable(WorkSpaceID, Provider, Token):
+def workspacevariable(WorkSpaceID, Provider, Token, OrganizationName):
     if os.name == 'nt':
         os.system("cls")
     else:
@@ -40,6 +40,12 @@ def workspacevariable(WorkSpaceID, Provider, Token):
                     #f.write(key + "=" + env_vars[key] +'\n')
                     f.write(key + "=" + (json.loads(result.content))['data']['id'] + "\n")
                     print("\033[1;32mVariable " + key + " Successfully uploaded to Workspace...\033[0m")
+                elif result.status_code == 422:
+                    url = "https://app.terraform.io/api/v2/organizations/" + OrganizationName + "/workspaces"
+                    headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8" }'
+                    headers = json.loads(headers_content)
+                    get = requests.get(url, headers = headers, allow_redirects = False)
+                    print(get.content)
                 else:
                     print("\033[1;31mError : " + str(result.status_code) + "\033[0m")
                 print('\033[0m')
@@ -59,12 +65,13 @@ def workspacevariable(WorkSpaceID, Provider, Token):
         print("\033[1;31mError : " + str(e) + "\033[0m")
     finally:
         f.close()
-        print("Script Execution Completed")
+        print("Script Execution Completed, Variables Successfully Pushed")
         print("\n##########################################################################################\n")
 
 def main():
     workspaceid = sys.argv[1]
     provider = sys.argv[2]
     token = sys.argv[3]
-    workspacevariable(workspaceid, provider, token)
+    organizationname = sys.argv[4]
+    workspacevariable(workspaceid, provider, token, organizationname)
 main()
