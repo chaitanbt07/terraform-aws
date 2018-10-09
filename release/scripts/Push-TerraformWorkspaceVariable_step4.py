@@ -38,14 +38,14 @@ def workspacevariable(WorkSpaceID, Provider, Token):
                 print(result.content)
                 if result.status_code in range(200, 202):
                     #f.write(key + "=" + env_vars[key] +'\n')
-                    f.write(key + "=" + (json.loads(result.content))['data']['id'])
+                    f.write(key + "=" + (json.loads(result.content))['data']['id'] + "\n")
                     print("\033[1;32mVariable " + key + " Successfully uploaded to Workspace...\033[0m")
                 else:
                     print("\033[1;31mError : " + str(result.status_code) + "\033[0m")
                 print('\033[0m')
             else:
                 print("key: " + key)
-                f.write(key + "=" + (json.loads(result.content))['data']['id'])
+                f.write(key + "=" + (json.loads(result.content))['data']['id'] + "\n")
                 payload = dict(data = dict(attributes = dict(key = key, value = env_vars[key], category =  "terraform", hcl = True, sensitive = False), relationships = dict(workspace = dict(data = dict(id = WorkSpaceID, type = "workspaces")))), type = "vars")
     # Creating Header content for POST request
                 headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8"}'
