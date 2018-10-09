@@ -29,14 +29,15 @@ def workspacevariable(WorkSpaceID, Provider, Token):
             if 'secret' in key:
                 print("\033[1;32m")
                 print("key: " + key)
-                f.write(key + "=" + env_vars[key] +'\n')
                 payload = dict(data = dict(attributes = dict(key = key, value = env_vars[key], category =  "terraform", hcl = False, sensitive = True), relationships = dict(workspace = dict(data = dict(id = WorkSpaceID, type = "workspaces")))), type = "vars")
     # Creating Header content for POST request
                 headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8" }'
                 headers = json.loads(headers_content)
                 url = "https://app.terraform.io/api/v2/vars"
                 result = requests.post(url, json = payload, headers = headers, allow_redirects = False)
+                print(result.content)
                 if result.status_code in range(200, 202):
+                    #f.write(key + "=" + env_vars[key] +'\n')
                     print("\033[1;32mVariable " + key + " Successfully uploaded to Workspace...\033[0m")
                 else:
                     print("\033[1;31mError : " + str(result.status_code) + "\033[0m")
