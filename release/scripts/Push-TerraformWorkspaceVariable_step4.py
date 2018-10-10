@@ -11,14 +11,14 @@ def workspacevariable(WorkSpaceID, Provider, Token, OrganizationName, WorkspaceN
     print("\n##########################################################################################\n")
     print("Script Execution Started")
     try:
-    # Getting Envrionment variable from run
-        f= open("variables.txt","a+")
+        # Getting Environment variable from run
+        f = open("variables.txt", "a+")
         a = subprocess.Popen("env | grep 'bamboo_" + Provider + "_*'", shell=True, stdout=subprocess.PIPE).stdout
         b = a.read()
         b = b.decode("utf-8")
         b = b.split("\n")
         b.pop()
-        c =[]
+        c = []
         env_vars = {}
         for i in b:
             c.append(i.split("="))
@@ -28,9 +28,9 @@ def workspacevariable(WorkSpaceID, Provider, Token, OrganizationName, WorkspaceN
         for key in env_vars:
             if 'secret' in key:
                 print("\033[1;32m")
-                payload = dict(data = dict(attributes = dict(key = key, value = env_vars[key], category =  "terraform", hcl = False, sensitive = True), relationships = dict(workspace = dict(data = dict(id = WorkSpaceID, type = "workspaces")))), type = "vars")
+                payload = dict(data = dict(attributes = dict(key=key, value=env_vars[key], category="terraform", hcl=False, sensitive=True), relationships=dict(workspace=dict(data=dict(id=WorkSpaceID, type="workspaces")))), type="vars")
     # Creating Header content for POST request
-                headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8" }'
+                headers_content = '{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8" }'
                 headers = json.loads(headers_content)
                 url = "https://app.terraform.io/api/v2/vars"
                 try:
@@ -42,7 +42,7 @@ def workspacevariable(WorkSpaceID, Provider, Token, OrganizationName, WorkspaceN
                     elif result.status_code == 422:
                         print("\033[1;32mGetting Variable Information...")
                         url = "https://app.terraform.io/api/v2/vars?filter%5Borganization%5D%5Bname%5D=" + OrganizationName + "&filter%5Bworkspace%5D%5Bname%5D=" + WorkspaceName
-                        headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8" }'
+                        headers_content = '{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8" }'
                         headers = json.loads(headers_content)
                         get = requests.get(url, headers = headers, allow_redirects = False)
                         json_object = (json.loads(get.content))['data']
@@ -55,12 +55,12 @@ def workspacevariable(WorkSpaceID, Provider, Token, OrganizationName, WorkspaceN
                 except Exception as e:
                     print("\033[1;31mError : " + str(e) + "\033[0m")
             else:
-                payload = dict(data = dict(attributes = dict(key = key, value = env_vars[key], category =  "terraform", hcl = True, sensitive = False), relationships = dict(workspace = dict(data = dict(id = WorkSpaceID, type = "workspaces")))), type = "vars")
+                payload = dict(data=dict(attributes=dict(key=key, value=env_vars[key], category="terraform", hcl=True, sensitive=False), relationships=dict(workspace=dict(data=dict(id=WorkSpaceID, type="workspaces")))), type="vars")
     # Creating Header content for POST request
-                headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8"}'
+                headers_content = '{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8"}'
                 headers = json.loads(headers_content)
                 url = "https://app.terraform.io/api/v2/vars"
-                result = requests.post(url, json = payload, headers = headers, allow_redirects = False)
+                result = requests.post(url, json=payload, headers=headers, allow_redirects=False)
                 if result.status_code in range(200, 202):
                     f.write(key + "=" + (json.loads(result.content))['data']['id'] + "\n")
                     print("\033[1;32mVariable " + key + " Successfully uploaded to Workspace...\033[0m")
@@ -71,6 +71,7 @@ def workspacevariable(WorkSpaceID, Provider, Token, OrganizationName, WorkspaceN
         f.close()
         print("Script Execution Completed, Variables Successfully Pushed")
         print("\n##########################################################################################\n")
+
 
 def main():
     workspaceid = sys.argv[1]
