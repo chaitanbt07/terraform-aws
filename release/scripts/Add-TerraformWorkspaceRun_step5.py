@@ -15,7 +15,7 @@ def workspacerun():
         f = open("TFE_RUNID.txt", "a+")
         buildkey = subprocess.Popen("env | grep 'bamboo_buildKey'", shell=True, stdout=subprocess.PIPE).stdout
         buildnum = subprocess.Popen("env | grep 'bamboo_buildResultKey'", shell=True, stdout=subprocess.PIPE).stdout
-        comment = "Run Requested by Release " +   + "for " + buildkey + " build number " + buildnum
+        comment = "Run Requested by Release for " + buildkey + " build number " + buildnum
         print(comment)
     except Exception as e:
         print("Error: " + str(e) + "\n")
