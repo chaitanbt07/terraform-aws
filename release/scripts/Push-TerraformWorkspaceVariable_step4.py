@@ -35,7 +35,7 @@ def workspacevariable(WorkSpaceID, Provider, Token, OrganizationName, WorkspaceN
                 headers = json.loads(headers_content)
                 url = "https://app.terraform.io/api/v2/vars"
                 result = requests.post(url, json = payload, headers = headers, allow_redirects = False)
-                print((json.loads(result.content))['detail'])
+                print((json.loads(result.content))['errors']['detail'])
                 if result.status_code in range(200, 202):
                     f.write(key + "=" + (json.loads(result.content))['data']['id'] + "\n")
                     print("\033[1;32mVariable " + key + " Successfully uploaded to Workspace...\033[0m")
