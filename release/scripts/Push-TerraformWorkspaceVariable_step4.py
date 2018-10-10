@@ -38,8 +38,11 @@ def workspacevariable(WorkSpaceID, Provider, Token, OrganizationName, WorkspaceN
                 #print((json.loads(result.content))['errors']['detail'])
                 if result.status_code in range(200, 202):
                     f.write(key + "=" + (json.loads(result.content))['data']['id'] + "\n")
+                    print(key + "=" + (json.loads(result.content))['data']['id'])
                     print("\033[1;32mVariable " + key + " Successfully uploaded to Workspace...\033[0m")
                 elif result.status_code == 422:
+                    print("\033[93mVariable with name " + key + " already Exists....\033[0m")
+                    print("\033[1;32mGetting Variable Information...")
                     url = "https://app.terraform.io/api/v2/vars?filter%5Borganization%5D%5Bname%5D=" + OrganizationName + "&filter%5Bworkspace%5D%5Bname%5D=" + WorkspaceName
                     headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8" }'
                     headers = json.loads(headers_content)
@@ -47,6 +50,7 @@ def workspacevariable(WorkSpaceID, Provider, Token, OrganizationName, WorkspaceN
                     json_object = (json.loads(get.content))['data']
                     for id in json_object:
                        f.write((id)['attributes']['key'] + "=" + (id)['id'] + "\n")
+                       print((id)['attributes']['key'] + "=" + (id)['id'])
                 else:
                     print("\033[1;31mError : " + str(result.status_code) + "\033[0m")
                 print('\033[0m')
