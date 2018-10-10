@@ -28,33 +28,33 @@ def workspacevariable(WorkSpaceID, Provider, Token, OrganizationName, WorkspaceN
         for key in env_vars:
             if 'secret' in key:
                 print("\033[1;32m")
-                print("Uploading key: " + key)
                 payload = dict(data = dict(attributes = dict(key = key, value = env_vars[key], category =  "terraform", hcl = False, sensitive = True), relationships = dict(workspace = dict(data = dict(id = WorkSpaceID, type = "workspaces")))), type = "vars")
     # Creating Header content for POST request
                 headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8" }'
                 headers = json.loads(headers_content)
                 url = "https://app.terraform.io/api/v2/vars"
-                result = requests.post(url, json = payload, headers = headers, allow_redirects = False)
-                #print((json.loads(result.content))['errors']['detail'])
-                if result.status_code in range(200, 202):
-                    f.write(key + "=" + (json.loads(result.content))['data']['id'] + "\n")
-                    print(key + "=" + (json.loads(result.content))['data']['id'])
-                    print("\033[1;32mVariable " + key + " Successfully uploaded to Workspace...\033[0m")
-                elif result.status_code == 422:
-                    print("\033[1;32mGetting Variable Information...")
-                    url = "https://app.terraform.io/api/v2/vars?filter%5Borganization%5D%5Bname%5D=" + OrganizationName + "&filter%5Bworkspace%5D%5Bname%5D=" + WorkspaceName
-                    headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8" }'
-                    headers = json.loads(headers_content)
-                    get = requests.get(url, headers = headers, allow_redirects = False)
-                    json_object = (json.loads(get.content))['data']
-                    for id in json_object:
-                       f.write((id)['attributes']['key'] + "=" + (id)['id'] + "\n")
-                       print((id)['attributes']['key'] + "=" + (id)['id'])
-                else:
-                    print("\033[1;31mError : " + str(result.status_code) + "\033[0m")
-                print('\033[0m')
+                try:
+                    result = requests.post(url, json = payload, headers = headers, allow_redirects = False)
+                    if result.status_code in range(200, 202):
+                        f.write(key + "=" + (json.loads(result.content))['data']['id'] + "\n")
+                        print(key + "=" + (json.loads(result.content))['data']['id'])
+                        print("\033[1;32mVariable " + key + " Successfully uploaded to Workspace...\033[0m")
+                    elif result.status_code == 422:
+                        print("\033[1;32mGetting Variable Information...")
+                        url = "https://app.terraform.io/api/v2/vars?filter%5Borganization%5D%5Bname%5D=" + OrganizationName + "&filter%5Bworkspace%5D%5Bname%5D=" + WorkspaceName
+                        headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8" }'
+                        headers = json.loads(headers_content)
+                        get = requests.get(url, headers = headers, allow_redirects = False)
+                        json_object = (json.loads(get.content))['data']
+                        for id in json_object:
+                            f.write((id)['attributes']['key'] + "=" + (id)['id'] + "\n")
+                            print("\033[1;32m" + (id)['attributes']['key'] + "=" + (id)['id'] + "\033[0m")
+                    else:
+                        print("\033[1;31mError : " + str(result.status_code) + "\033[0m")
+                        print('\033[0m')
+                except Exception as e:
+                    print("\033[1;31mError : " + str(e) + "\033[0m")
             else:
-                print("key: " + key)
                 payload = dict(data = dict(attributes = dict(key = key, value = env_vars[key], category =  "terraform", hcl = True, sensitive = False), relationships = dict(workspace = dict(data = dict(id = WorkSpaceID, type = "workspaces")))), type = "vars")
     # Creating Header content for POST request
                 headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8"}'
