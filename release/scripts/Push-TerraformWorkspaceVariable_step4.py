@@ -28,7 +28,7 @@ def workspacevariable(WorkSpaceID, Provider, Token, OrganizationName, WorkspaceN
         for key in env_vars:
             if 'secret' in key:
                 print("\033[1;32m")
-                print("key: " + key)
+                print("Uploading key: " + key)
                 payload = dict(data = dict(attributes = dict(key = key, value = env_vars[key], category =  "terraform", hcl = False, sensitive = True), relationships = dict(workspace = dict(data = dict(id = WorkSpaceID, type = "workspaces")))), type = "vars")
     # Creating Header content for POST request
                 headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8" }'
@@ -41,7 +41,6 @@ def workspacevariable(WorkSpaceID, Provider, Token, OrganizationName, WorkspaceN
                     print(key + "=" + (json.loads(result.content))['data']['id'])
                     print("\033[1;32mVariable " + key + " Successfully uploaded to Workspace...\033[0m")
                 elif result.status_code == 422:
-                    print("\033[93mVariable with name " + key + " already Exists....\033[0m")
                     print("\033[1;32mGetting Variable Information...")
                     url = "https://app.terraform.io/api/v2/vars?filter%5Borganization%5D%5Bname%5D=" + OrganizationName + "&filter%5Bworkspace%5D%5Bname%5D=" + WorkspaceName
                     headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8" }'
