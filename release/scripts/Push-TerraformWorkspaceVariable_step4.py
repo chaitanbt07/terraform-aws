@@ -41,7 +41,7 @@ def workspacevariable(WorkSpaceID, Provider, Token, OrganizationName, WorkspaceN
                     f.write(key + "=" + (json.loads(result.content))['data']['id'] + "\n")
                     print("\033[1;32mVariable " + key + " Successfully uploaded to Workspace...\033[0m")
                 elif result.status_code == 422:
-                    url = "https://app.terraform.io/api/v2/vars?filter%5Borganization%5D%5Bname%5D=" + OrganizationName + "&filter%5Bworkspace%5D%5Bname%5D=" + WorkSpaceName
+                    url = "https://app.terraform.io/api/v2/vars?filter%5Borganization%5D%5Bname%5D=" + OrganizationName + "&filter%5Bworkspace%5D%5Bname%5D=" + WorkspaceName
                     headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json", "charset" : "utf-8" }'
                     headers = json.loads(headers_content)
                     get = requests.get(url, headers = headers, allow_redirects = False)
