@@ -49,20 +49,20 @@ def workspacerun(WorkSpaceID, ConfigVersionID, Token):
     url = "https://app.terraform.io/api/v2/runs"
     #try:
     # Creating a file to append the RUN information
-    f = open("TFE_RUNID.txt", "a+")
+    #f = open("TFE_RUNID.txt", "a+")
     # Initialize POST request
-    result = requests.post(url, json=serialized, headers=headers, allow_redirects=False)
-    print(result.content)
+    print("result = requests.post(" + url + ", json=" + serialized + ", headers=" + headers + ", allow_redirects=False")
+    #print(result.content)
     #loaded_json = (json.loads(result.content))['data']
     #print(loaded_json)
-    if result.status_code in range(200, 203):
-        print("New Run created for workspace with WorkspaceID " + WorkSpaceID + "\n")
+    #if result.status_code in range(200, 203):
+     #   print("New Run created for workspace with WorkspaceID " + WorkSpaceID + "\n")
         #print("RunID: " + loaded_json['attributes']['id'])
         #f.write("RunID: " + loaded_json['attributes']['id'])
     #except Exception as e:
     #   print("Error: " + str(e) + "\n")
     #finally:
-    f.close()
+    #f.close()
 
 
 def main():
