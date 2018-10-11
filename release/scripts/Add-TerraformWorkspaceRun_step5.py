@@ -42,7 +42,8 @@ def workspacerun(WorkSpaceID, ConfigVersionID, Token):
                     }
                 }'''
     serialized = json.loads(payload)
-
+    print(serialized)
+    print(type(serialized))
     # Creating Header content for POST request
     headers_content = '{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json"}'
     headers = json.loads(headers_content)
