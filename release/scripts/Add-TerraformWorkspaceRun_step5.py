@@ -22,20 +22,20 @@ def workspacerun(WorkSpaceID, ConfigVersionID, Token):
                 "data": {
                     "attributes": {
                         "is-destroy": false,
-                        "message": "''' + comment + '''"
+                        "message": ''' + comment + '''
                         },
                     "type": "runs",
                     "relationships": {
                         "workspace": {
                             "data": {
                                 "type": "workspaces",
-                                "id": "''' + WorkSpaceID + '''"
+                                "id": ''' + WorkSpaceID + '''
                             }
                         },
                         "configuration-version": {
                             "data": {
                                 "type": "configuration-versions",
-                                "id": "''' + ConfigVersionID + '''"
+                                "id": ''' + ConfigVersionID + '''
                             }
                         }
                     }
