@@ -51,7 +51,7 @@ def workspacerun(WorkSpaceID, ConfigVersionID, Token):
     # Creating a file to append the RUN information
     f = open("TFE_RUNID.txt", "a+")
     # Initialize POST request
-    result = requests.post(url, json=serialized, headers=headers, allow_redirects=False)
+    result = requests.post(url, json=json.loads(serialized), headers=json.loads(headers), allow_redirects=False)
     print(result.content)
     #loaded_json = (json.loads(result.content))['data']
     #print(loaded_json)
