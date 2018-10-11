@@ -41,6 +41,7 @@ def workspacerun(WorkSpaceID, ConfigVersionID, Token):
                     }
                     }
                 }'''
+    payload1 = dict(data = dict(attributes=dict(is-destroy=false, message=comment), 'type': 'runs' relationships=dict(workspace=dict(data=dict(type="workspaces", id=WorkSpaceID)), configuration-version=dict(data=dict(type="configuration-versions", id=ConfigVersionID)))))
     serialized = json.loads(payload)
     print(serialized)
     # Creating Header content for POST request
@@ -51,8 +52,9 @@ def workspacerun(WorkSpaceID, ConfigVersionID, Token):
     # Creating a file to append the RUN information
     #f = open("TFE_RUNID.txt", "a+")
     # Initialize POST request
-    print("result = requests.post(" + url + ", json=" + str(serialized) + ", headers=" + str(headers) + ", allow_redirects=False")
-    #print(result.content)
+    result = requests.post(url, json=payload1, headers=headers, allow_redirects=False)
+    print("result = requests.post(" + url + ", json=" + str(payload1) + ", headers=" + str(headers) + ", allow_redirects=False")
+    print(result.content)
     #loaded_json = (json.loads(result.content))['data']
     #print(loaded_json)
     #if result.status_code in range(200, 203):
