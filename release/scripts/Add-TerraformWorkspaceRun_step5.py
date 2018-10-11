@@ -52,10 +52,9 @@ def workspacerun(WorkSpaceID, ConfigVersionID, Token):
     # Creating a file to append the RUN information
     f = open("TFE_RUNID.txt", "a+")
     # Initialize POST request
-    result = requests.post(url, json=str(json.dumps(serialized)), headers=str(json.dumps(headers)), allow_redirects=False)
-    print(result.content)
-    #loaded_json = (json.loads(result.content))['data']
-    #print(loaded_json)
+    result = requests.post(url, json=serialized, headers=headers, allow_redirects=False)
+    loaded_json = (json.loads(result.content))['data']
+    print(loaded_json)
     if result.status_code in range(200, 203):
         print("New Run created for workspace with WorkspaceID " + WorkSpaceID + "\n")
         #print("RunID: " + loaded_json['attributes']['id'])
