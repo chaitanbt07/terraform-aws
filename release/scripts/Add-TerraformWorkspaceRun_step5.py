@@ -48,21 +48,21 @@ def workspacerun(WorkSpaceID, ConfigVersionID, Token):
     headers_content = '{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json"}'
     headers = json.loads(headers_content)
     url = "https://app.terraform.io/api/v2/runs"
-    try:
-        # Creating a file to append the RUN information
-        f = open("TFE_RUNID.txt", "a+")
-        # Initialize POST request
-        result = requests.post(url, json=serialized, headers=headers, allow_redirects=False)
-        loaded_json = (json.loads(result.content))['data']
-        print(loaded_json)
-        if result.status_code in range(200, 203):
-            print("New Run created for workspace with WorkspaceID " + WorkSpaceID + "\n")
-            print("RunID: " + loaded_json['attributes']['id'])
-            f.write("RunID: " + loaded_json['attributes']['id'])
-    except Exception as e:
-        print("Error: " + str(e) + "\n")
-    finally:
-        f.close() 
+    #try:
+    # Creating a file to append the RUN information
+    f = open("TFE_RUNID.txt", "a+")
+    # Initialize POST request
+    result = requests.post(url, json=serialized, headers=headers, allow_redirects=False)
+    loaded_json = (json.loads(result.content))['data']
+    print(loaded_json)
+    if result.status_code in range(200, 203):
+        print("New Run created for workspace with WorkspaceID " + WorkSpaceID + "\n")
+        print("RunID: " + loaded_json['attributes']['id'])
+        f.write("RunID: " + loaded_json['attributes']['id'])
+    #except Exception as e:
+    #   print("Error: " + str(e) + "\n")
+    #finally:
+    f.close()
 
 
 def main():
