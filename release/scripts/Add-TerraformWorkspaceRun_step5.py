@@ -16,9 +16,8 @@ def workspacerun(WorkSpaceID,ConfigVersionID, Token):
     buildnum = subprocess.Popen("env | grep 'bamboo_buildResultKey'", shell=True, stdout=subprocess.PIPE).stdout
     buildkey = ((buildkey.read()).decode("utf-8")).split("=")
     buildnum = ((buildnum.read()).decode("utf-8")).split("=")
-    comment = "Run Requested by Release for " + buildkey[1].replace("\n", "") + " build number " + \
-              buildnum[1].replace("\n", "")
-    print("\033[1;32m")
+    comment = "Run Requested by Release for " + buildkey[1].replace("\n", "") + " build number " + buildnum[1].replace("\n", "")
+    print(comment)
     payload = '''{
                 "data": {
                     "attributes": {
@@ -46,6 +45,7 @@ def workspacerun(WorkSpaceID,ConfigVersionID, Token):
     # Creating Header content for POST request
     headers_content = '{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json"}'
     headers = json.loads(headers_content)
+    print(serialized)
     url = "https://app.terraform.io/api/v2/runs"
     try:
         # Creating a file to append the RUN information

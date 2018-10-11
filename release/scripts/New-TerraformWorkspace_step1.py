@@ -21,36 +21,37 @@ def workspace(Organization, WorkSpaceName, Token):
             "type": "workspaces"
             }
         }'''
-    
-    serilaized = json.loads(payload)
+
+    serialized = json.loads(payload)
     # Creating Header content for POST request
-    headers_content ='{"Authorization" : "Bearer ' + Token + '", "Content-Type" : "application/vnd.api+json"}'
+    headers_content = '{"Authorization" : "Bearer ' + Token + '", "Content-Type" : "application/vnd.api+json"}'
     headers = json.loads(headers_content)
     
     url = "https://app.terraform.io/api/v2/organizations/" + Organization + "/workspaces"
     
     try:
         # Creating a file to append the Workspace information
-        f= open("workspace.txt","a+")
+        f = open("workspace.txt", "a+")
         # Initialize POST request
-        result = requests.post(url, json = serilaized, headers = headers, allow_redirects=False)
+        result = requests.post(url, json=serialized, headers=headers, allow_redirects=False)
         if result.status_code == 422 and result.status_code != 200:
             try:
                 print("\033[93mWorkspace with name " + WorkSpaceName + " already Exists....\033[0m")
                 print("\033[1;32mGetting Workspace Information...\033[1;32m")
-                get_result = requests.get(url, headers = headers, allow_redirects=False)
+                get_result = requests.get(url, headers=headers, allow_redirects=False)
                 loaded_json = (json.loads(get_result.content))['data']
                 for i in loaded_json:
-                        if ((i['attributes']['name']) == WorkSpaceName):
+                        if (i['attributes']['name']) == WorkSpaceName:
                             print("WorkspaceID: " + i['id'])
-                            f.write("WorkspaceID: " + i['id'] +'\n')
+                            f.write("WorkspaceID: " + i['id'] + '\n')
                             print("WorkspaceName: " + i['attributes']['name'])
-                            f.write("WorkspaceName: " + i['attributes']['name'] +'\n')
+                            f.write("WorkspaceName: " + i['attributes']['name'] + '\n')
                             print('\033[0m')
             except Exception as e:
                 print("\033[1;31mcode failed :" + str(e) + "\033[0m")
         elif result.status_code == 404:
-            print("\033[1;31mError creating workspace; Check the permission and the organization name and settings\033[0m")
+            print("\033[1;31mError creating workspace; Check the permission and the organization name and settings")
+            print("\033[0m")
         elif result.status_code == 200 or result.status_code == 201:
             print("\033[1;32mNew Workspace created...")
             print("WorkspaceID: " + (json.loads(result.content))['data']['id'])
