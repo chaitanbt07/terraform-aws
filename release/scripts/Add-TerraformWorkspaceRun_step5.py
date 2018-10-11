@@ -41,17 +41,17 @@ def workspacerun(WorkSpaceID, ConfigVersionID, Token):
                     }
                     }
                 }'''
-    serialized = json.dumps(payload)
+    serialized = json.loads(payload)
     print(serialized)
     # Creating Header content for POST request
     headers_content = '{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json"}'
-    headers = json.dumps(headers_content)
+    headers = json.loads(headers_content)
     url = "https://app.terraform.io/api/v2/runs"
     #try:
     # Creating a file to append the RUN information
     f = open("TFE_RUNID.txt", "a+")
     # Initialize POST request
-    result = requests.post(url, json=json.loads(serialized), headers=json.loads(headers), allow_redirects=False)
+    result = requests.post(url, json=serialized, headers=headers, allow_redirects=False)
     print(result.content)
     #loaded_json = (json.loads(result.content))['data']
     #print(loaded_json)
