@@ -41,7 +41,7 @@ def workspacerun(WorkSpaceID, ConfigVersionID, Token):
                     }
                     }
                 }'''
-    payload1 = dict(data = dict(attributes=dict(is-destroy=false, message=comment), 'type': 'runs' relationships=dict(workspace=dict(data=dict(type="workspaces", id=WorkSpaceID)), configuration-version=dict(data=dict(type="configuration-versions", id=ConfigVersionID)))))
+    payload1 = dict(data = dict(attributes=dict("is-destroy"=false, message=comment), type="runs", relationships=dict(workspace=dict(data=dict(type="workspaces", id=WorkSpaceID)), configuration-version=dict(data=dict(type="configuration-versions", id=ConfigVersionID)))))
     serialized = json.loads(payload)
     print(serialized)
     # Creating Header content for POST request
