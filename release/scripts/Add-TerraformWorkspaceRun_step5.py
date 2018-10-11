@@ -34,7 +34,7 @@ def workspacerun(WorkSpaceID, ConfigVersionID, Token):
                         },
                         "configuration-version": {
                             "data": {
-                                "type": "workspaces",
+                                "type": "configuration-versions",
                                 "id": "''' + ConfigVersionID + '''"
                             }
                         }
