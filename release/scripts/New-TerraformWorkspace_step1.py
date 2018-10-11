@@ -24,7 +24,7 @@ def workspace(Organization, WorkSpaceName, Token):
     
     serilaized = json.loads(payload)
     # Creating Header content for POST request
-    headers_content ='{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json"}'
+    headers_content ='{"Authorization" : "Bearer ' + Token + '", "Content-Type" : "application/vnd.api+json"}'
     headers = json.loads(headers_content)
     
     url = "https://app.terraform.io/api/v2/organizations/" + Organization + "/workspaces"

@@ -4,6 +4,7 @@ import sys
 import subprocess
 import json
 
+
 def workspacerun(WorkSpaceID,ConfigVersionID, Token):
     if os.name == 'nt':
         os.system("cls")
@@ -41,7 +42,7 @@ def workspacerun(WorkSpaceID,ConfigVersionID, Token):
                     }
                     }
                 }'''
-    serilaized = json.loads(payload)
+    serialized = json.loads(payload)
     # Creating Header content for POST request
     headers_content = '{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json"}'
     headers = json.loads(headers_content)
@@ -50,7 +51,7 @@ def workspacerun(WorkSpaceID,ConfigVersionID, Token):
         # Creating a file to append the RUN information
         f = open("TFE_RUNID.txt", "a+")
         # Initialize POST request
-        result = requests.post(url, json=serilaized, headers=headers, allow_redirects=False)
+        result = requests.post(url, json=serialized, headers=headers, allow_redirects=False)
         loaded_json = (json.loads(result.content))['data']
         print(loaded_json)
         if result.status_code in range(200, 203):
