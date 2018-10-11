@@ -18,7 +18,8 @@ def workspacerun(WorkSpaceID,ConfigVersionID, Token):
     buildnum = ((buildnum.read()).decode("utf-8")).split("=")
     comment = "Run Requested by Release for " + buildkey[1].replace("\n", "") + " build number " + buildnum[1].replace("\n", "")
     print(comment)
-    payload = '''{
+    try:
+        payload = '''{
                 "data": {
                     "attributes": {
                         "is-destroy": false,
@@ -41,7 +42,9 @@ def workspacerun(WorkSpaceID,ConfigVersionID, Token):
                     }
                     }
                 }'''
-    serialized = json.loads(payload)
+        serialized = json.loads(payload)
+    except Exception as e:
+        print("Error Formatting JSON " + str(e) + "\n")
     # Creating Header content for POST request
     headers_content = '{"Authorization" : "Bearer  ' + Token + '", "Content-Type" : "application/vnd.api+json"}'
     headers = json.loads(headers_content)
