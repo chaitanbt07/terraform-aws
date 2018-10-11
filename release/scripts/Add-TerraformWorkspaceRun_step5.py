@@ -43,6 +43,7 @@ def workspacerun(WorkSpaceID,ConfigVersionID, Token):
                     }
                 }'''
         serialized = json.loads(payload)
+        print(serialized)
     except Exception as e:
         print("Error Formatting JSON " + str(e) + "\n")
     # Creating Header content for POST request
