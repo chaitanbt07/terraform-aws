@@ -38,8 +38,8 @@ def workspacerun(WorkSpaceID, ConfigVersionID, Token):
         print(loaded_json)
         if result.status_code in range(200, 203):
             print("New Run created for workspace with WorkspaceID " + WorkSpaceID + "\n")
-            print("RunID: " + loaded_json['attributes']['id'])
-            f.write("RunID: " + loaded_json['attributes']['id'])
+            print("RunID: " + loaded_json['id'])
+            f.write("RunID: " + loaded_json['id'])
     except Exception as e:
         print("Error: " + str(e) + "\n")
     finally:
