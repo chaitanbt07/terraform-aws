@@ -19,31 +19,11 @@ def workspacerun(WorkSpaceID, ConfigVersionID, Token):
     buildnum = ((buildnum.read()).decode("utf-8")).split("=")
     comment = "Run Requested by Release for " + buildkey[1].replace("\n", "") + " build number " + buildnum[1].replace("\n", "")
     print(comment)
-    payload = '''{
-                "data": {
-                    "attributes": {
-                        "is-destroy": false,
-                        "message": "''' + comment + '''"
-                        },
-                    "type": "runs",
-                    "relationships": {
-                        "workspace": {
-                            "data": {
-                                "type": "workspaces",
-                                "id": "''' + WorkSpaceID + '''"
-                            }
-                        },
-                        "configuration-version": {
-                            "data": {
-                                "type": "configuration-versions",
-                                "id": "''' + ConfigVersionID + '''"
-                            }
-                        }
-                    }
-                    }
-                }'''
-    payload1 = dict(data = dict(attributes=dict([("is-destroy", False), ("message", comment)]), type="runs", relationships=dict(workspace=dict(data=dict(type="workspaces", id=WorkSpaceID)), [("configuration-version", dict(data=dict(type="configuration-versions", id=ConfigVersionID)))])))
-    serialized = json.loads(payload)
+    payload = dict(data=dict(type='runs', attributes=dict((('is-destroy', 'false'), ('message', comment))),
+                             relationships=dict([((
+                             'configuration-version', dict(data=dict(type='configuration-versions', id=ConfigVersionID))))],
+                                                workspace=dict(data=dict(type='workspaces', id=WorkSpaceID)))))
+    serialized = json.dumps(payload)
     print(serialized)
     # Creating Header content for POST request
     headers_content = '{"Authorization" : "Bearer ' + Token + '", "Content-Type" : "application/vnd.api+json"}'
