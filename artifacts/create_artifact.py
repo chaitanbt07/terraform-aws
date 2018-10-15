@@ -3,6 +3,7 @@ tar = tarfile.open("../terraform.tar.gz", "w:gz")
 for file in glob.glob("**/*.tf", recursive=True):
     try:
         print("Creating Artifacts....")
+        print(file)
         tar.add(file)
     except Exception as e:
         print("Error :" + str(e))
