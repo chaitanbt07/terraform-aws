@@ -1,5 +1,5 @@
 import glob, tarfile
-tar = tarfile.open("terraform.tar.gz", "w:gz")
+tar = tarfile.open("../terraform.tar.gz", "w:gz")
 for file in glob.glob("**/*.tf", recursive=True):
     try:
         print("Creating Artifacts....")
@@ -8,6 +8,6 @@ for file in glob.glob("**/*.tf", recursive=True):
     except Exception as e:
         print("Error :" + str(e))
 tar.close()
-t = tarfile.open("terraform.tar.gz", "r")
+t = tarfile.open("../terraform.tar.gz", "r")
 for member in t.getmembers():
     print(member.name)
