@@ -45,7 +45,7 @@ Process {
         
     $Result = (Invoke-RestMethod @GET).data
     
-    $Credentials = Get-ChildItem -Path "env:$Provider*"
+    $Credentials = Get-ChildItem -Path "env:bamboo_$Provider*"
     
     foreach ($key in $Result) {
         $keyid = $key.id
