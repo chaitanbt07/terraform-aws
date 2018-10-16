@@ -50,7 +50,7 @@
 
             try
             {
-                $Credential | % {if (($_.key -match "secret") -or ($_.key -match "access")) { $sensitive,$hcl,$keyname = $true,$false,$($_.key.remove(0,7))}else{$sensitive,$hcl,$keyname =  $false,$false,$($_.key.remove(0,(7+$_.key.Length)))}}
+                $Credential | % {if (($_.key -match "secret") -or ($_.key -match "access")) { $sensitive,$hcl,$keyname = $true,$false,$($_.key.remove(0,7))}else{$sensitive,$hcl,$keyname =  $false,$false,$($_.key.remove(0,(7+$_.key.Length+1)))}}
 		        $Json = @{
                   "data"= @{
                     "type"="vars"
