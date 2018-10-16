@@ -50,11 +50,9 @@ Process {
     foreach ($key in $Result) {
         $keyid = $key.id
         $keyname = $key.attributes.key
-        Write-Host "For Variable: $keyname" 
         foreach ($cred in $Credentials) {
             $credkey = $cred.key
             $credvalue = $cred.value
-            Write-Host "For Credential: $credvalue"
             if ($keyname -match $credkey) {
                 $hcl = $false
                 $sensitive = $true
