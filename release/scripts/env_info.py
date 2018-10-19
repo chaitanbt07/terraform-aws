@@ -13,11 +13,19 @@ try:
                 {
                 'AttributeName': 'RunID',
                 'KeyType': 'HASH'
+                },
+                {
+                'AttributeName': 'ConfigID',
+                'KeyType': 'RANGE'
                 }
             ],
             AttributeDefinitions=[
                 {
                     'AttributeName': 'RunID',
+                    'AttributeType': 'S'
+                },
+                {
+                    'AttributeName': 'ConfigID',
                     'AttributeType': 'S'
                 }
             ],
@@ -31,23 +39,23 @@ try:
             print("TableRequestID: " + str(table['ResponseMetadata']['RequestId']))
             print("TableCreationDate: " + str(table['TableDescription']['CreationDateTime']))
             time.sleep(8)
-            dynamodb_put_data('RunID', sys.argv[3])
+            dynamodb_put_data('RunID', sys.argv[3], 'ConfigID', sys.argv[4])
         except dynamodb.exceptions.ResourceInUseException as e:
             print("Table exists already,")
             try:
-                dynamodb_put_data('RunID', sys.argv[3])      
+                dynamodb_put_data('RunID', sys.argv[3], 'ConfigID', sys.argv[4]) 
             except Exception as ce:
                 print("Unable to load data into the table, " + str(ce))
         except botocore.exceptions.ClientError as ce:
             print("Error Creating Table.." + str(ce.response['Error']['Message']))
 
-    def dynamodb_put_data(key, value):
+    def dynamodb_put_data(key1, value1, key2, value2):
         try:
             dynamodb = boto3.resource('dynamodb', region_name='ap-south-1', aws_access_key_id=sys.argv[1], aws_secret_access_key=sys.argv[2])
             update_table = dynamodb.Table('terraform_data')
             json_data = {}
-            json_data[key] = value
-            json_data[key]['var'] = sys.argv[4]
+            json_data[key1] = value1
+            json_data[key2] = value2
             response = update_table.put_item(Item=json_data)
             if response['ResponseMetadata']['HTTPStatusCode'] == 200:
                 print("Data updated")
