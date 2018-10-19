@@ -25,7 +25,7 @@ try:
                 'ReadCapacityUnits': 5,
                 'WriteCapacityUnits': 5
             }
-        )
+            )
             print("TableARN: " + str(table['TableDescription']['TableArn']))
             print("TableID: " + str(table['TableDescription']['TableId']))
             print("TableRequestID: " + str(table['ResponseMetadata']['RequestId']))
@@ -37,15 +37,17 @@ try:
             try:
                 dynamodb_put_data('RunID', sys.argv[3])      
             except Exception as ce:
-                print("Unable to load data into the table " + str(ce))
+                print("Unable to load data into the table, " + str(ce))
         except botocore.exceptions.ClientError as ce:
             print("Error Creating Table.." + str(ce.response['Error']['Message']))
+
     def dynamodb_put_data(key, value):
         try:
             dynamodb = boto3.resource('dynamodb', region_name='ap-south-1', aws_access_key_id=sys.argv[1], aws_secret_access_key=sys.argv[2])
             update_table = dynamodb.Table('terraform_data')
             json_data = {}
             json_data[key] = value
+            json_data[key]['var'] = sys.argv[4]
             response = update_table.put_item(Item=json_data)
             if response['ResponseMetadata']['HTTPStatusCode'] == 200:
                 print("Data updated")
