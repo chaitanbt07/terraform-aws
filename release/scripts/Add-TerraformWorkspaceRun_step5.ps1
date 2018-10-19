@@ -37,7 +37,7 @@
 
         Write-Host "$($MyInvocation.MyCommand.Name): Script execution started"
 
-        $Comment = "Run Requested By Release $($env:bamboo_deploy.release) for $($env:bamboo_buildKey) build number $($env:bamboo_buildResultKey) "
+        $Comment = "Run Requested By Release $($env:bamboo_deploy.release) for $($env:bamboo_buildKey) build number $($env:bamboo_buildNumber)"
         
         $Json = @{
           "data"= @{
