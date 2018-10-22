@@ -85,7 +85,7 @@ Process {
                 $Update = (Invoke-RestMethod @Patch).data
                 
             }
-            elseif ($("bamboo_" + $provider + "_" + $keyname) -match $credkey) {
+            elseif ($($provider + "_" + $keyname) -match $credkey) {
                 
                 $Json = @{
                     "data" = @{
