@@ -52,7 +52,9 @@ Process {
         $keyname = $key.attributes.key
         foreach ($cred in $Credentials) {
             $credkey = $cred.key
+            $credkey
             $credvalue = $cred.value
+            $credvalue
             if ($keyname -match $credkey) {
                 $hcl = $false
                 $sensitive = $true
