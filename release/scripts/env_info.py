@@ -15,17 +15,17 @@ try:
                 'KeyType': 'HASH'
                 },
                 {
-                'AttributeName': 'ConfigID',
+                'AttributeName': 'Workspace',
                 'KeyType': 'RANGE'
                 }
             ],
             AttributeDefinitions=[
                 {
-                    'AttributeName': 'RunID',
+                    'AttributeName': 'Workspace',
                     'AttributeType': 'S'
                 },
                 {
-                    'AttributeName': 'ConfigID',
+                    'AttributeName': 'RunID',
                     'AttributeType': 'S'
                 }
             ],
@@ -39,11 +39,11 @@ try:
             print("TableRequestID: " + str(table['ResponseMetadata']['RequestId']))
             print("TableCreationDate: " + str(table['TableDescription']['CreationDateTime']))
             time.sleep(8)
-            dynamodb_put_data('RunID', sys.argv[3], 'ConfigID', sys.argv[4])
+            dynamodb_put_data('RunID', sys.argv[3], 'Vars', sys.argv[4])
         except dynamodb.exceptions.ResourceInUseException as e:
             print("Table exists already,")
             try:
-                dynamodb_put_data('RunID', sys.argv[3], 'ConfigID', sys.argv[4]) 
+                dynamodb_put_data('RunID', sys.argv[3], 'Vars', sys.argv[4]) 
             except Exception as ce:
                 print("Unable to load data into the table, " + str(ce))
         except botocore.exceptions.ClientError as ce:
@@ -56,6 +56,8 @@ try:
             json_data = {}
             json_data[key1] = value1
             json_data[key2] = value2
+            json_data['config'] = 'config-dadaddfadf'
+            json_data['Workspace'] = 'ws-erfgeerere'
             response = update_table.put_item(Item=json_data)
             if response['ResponseMetadata']['HTTPStatusCode'] == 200:
                 print("Data updated")
