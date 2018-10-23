@@ -55,7 +55,7 @@ Process {
             $credkey
             $credvalue = $cred.value
             $credvalue
-            if ($keyname -match $credkey) {
+                if ("bamboo_" + $keyname -match $credkey) {
                 $hcl = $false
                 $sensitive = $true
                 $Json = @{
