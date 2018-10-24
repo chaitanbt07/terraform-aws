@@ -41,8 +41,8 @@ Process {
     try {
         $Result = (Invoke-RestMethod @Post).data
 
-        Write-Host ('##vso[task.setvariable variable=TFE_UPLOADURL]{0}' -f $Result.attributes.'upload-url')
-        Write-Host ('##vso[task.setvariable variable=TFE_CONFIGID]{0}' -f $Result.id)
+        #Write-Host ('##vso[task.setvariable variable=TFE_UPLOADURL]{0}' -f $Result.attributes.'upload-url')
+        #Write-Host ('##vso[task.setvariable variable=TFE_CONFIGID]{0}' -f $Result.id)
         
         Write-Output "TFE_CONFIGID=$($Result.id)" |out-file ./TFE_CONFIGID.txt
         Write-Output "TFE_UPLOADURL=$($Result.attributes.'upload-url')" |out-file -Append ./TFE_CONFIGID.txt
