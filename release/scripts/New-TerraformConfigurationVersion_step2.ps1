@@ -46,7 +46,7 @@ Process {
         
         Write-Output "TFE_CONFIGID=$($Result.id)" |out-file ./TFE_CONFIGID.txt
         Write-Output "TFE_UPLOADURL=$($Result.attributes.'upload-url')" |out-file -Append ./TFE_CONFIGID.txt
-        gci
+        #gci
         Return $Result
     }
     catch {
