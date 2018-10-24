@@ -69,4 +69,3 @@ try:
     dynamodb_table_create() 
 except IndexError as ix:
             print("Error: Check the given inputs " + str(ix))
-
