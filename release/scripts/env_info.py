@@ -68,5 +68,6 @@ try:
             print("Error uploading data: " + str(er))
     
     dynamodb_table_create() 
+
 except IndexError as ix:
             print("Error: Check the given inputs " + str(ix))
