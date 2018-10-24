@@ -3,6 +3,7 @@ import json
 import sys
 import botocore.exceptions
 import time
+
 try: 
     dynamodb = boto3.client('dynamodb', region_name='ap-south-1', aws_access_key_id=sys.argv[1], aws_secret_access_key=sys.argv[2])
     def dynamodb_table_create():
