@@ -75,7 +75,7 @@ Process {
 
             $Result = (Invoke-RestMethod @Get).data
 
-            Write-Host ('##vso[task.setvariable variable=TFE_WORKSPACEID]{0}' -f $Result.id)
+            #Write-Host ('##vso[task.setvariable variable=TFE_WORKSPACEID]{0}' -f $Result.id)
 	        Write-Output "TFE_WORKSPACE_ID=$($Result.id)" |out-file ./TFE_WORKSPACEID.txt 
 	        Get-ChildItem
             Return $Result
