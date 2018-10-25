@@ -76,7 +76,6 @@
     }
     Process
     {
-
         try
         {
             $Result = (Invoke-RestMethod @Post).data
