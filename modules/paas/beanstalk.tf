@@ -55,6 +55,12 @@ resource "aws_elastic_beanstalk_environment" "beanstalkenv" {
   }
 
   setting {
+    namespace = "aws:elb:loadbalancer"
+    name = "CrossZone"
+    value = "true"
+  }
+
+  setting {
     namespace = "aws:elasticbeanstalk:environment"
     name      = "ServiceRole"
     value     = "${var.service_role}"

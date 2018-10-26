@@ -24,7 +24,7 @@ Begin {
         "data" = @{
             "attributes" = @{
                 "name"       = "$WorkSpaceName"
-                "auto-apply" = $true
+                "auto-apply" = $false
             }
             "type"       = "workspaces"
         }
