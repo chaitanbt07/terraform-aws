@@ -64,6 +64,19 @@ Process {
         Write-Host "$($MyInvocation.MyCommand.Name): $Message. Getting workspace ID."
 
         try {
+            $Patch = @{
+                Uri = "https://app.terraform.io/api/v2/organizations/$Organization/workspaces/$WorkSpaceName"
+                Headers     = @{"Authorization" = "Bearer $Token" }
+                ContentType = 'application/vnd.api+json'
+                Method      = 'Patch'
+                Body        = $Json
+                ErrorAction = 'stop'
+            }
+            
+            $Patch_Result = (Invoke-RestMethod @Patch).data
+
+            $Patch_Result
+
             $Get = @{
 
                 Uri         = "https://app.terraform.io/api/v2/organizations/$Organization/workspaces/$WorkSpaceName"
