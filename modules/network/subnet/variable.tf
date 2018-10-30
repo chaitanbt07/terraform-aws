@@ -2,10 +2,12 @@ variable "name" {
   default = ""
 }
 
+variable "subnet_count" {}
+
 variable "vpc_id" {}
 
 variable "cidr_block" {
-  default = ""
+  type = "list"
 }
 
 variable "env" {
@@ -17,5 +19,5 @@ variable "create_vpc" {
 }
 
 variable "availability_zone" {
-  default = ""
+  type = "list"
 }

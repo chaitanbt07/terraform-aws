@@ -29,9 +29,10 @@ module "public-frontend-subnet-primary" {
   # Configure public subnet 
   source     = "modules/network/subnet/"
   name       = "core-network-vpc-publicsubnet"
+  subnet_count = 1
   vpc_id     = "${module.core-network-vpc.id}"
   cidr_block = "${var.public-frontend-subnet-primary}"
-  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  availability_zone = ["${data.aws_availability_zones.available.names[0]}", "${data.aws_availability_zones.available.names[1]}"]
   create_vpc = "${var.create_vpc}"
   env        = "${var.env}"
 }
@@ -40,9 +41,10 @@ module "public-frontend-subnet-secondary" {
   # Configure secondary public subnet 
   source     = "modules/network/subnet/"
   name       = "core-network-vpc-publicsubnet-secondary"
+  subnet_count = 1
   vpc_id     = "${module.core-network-vpc.id}"
   cidr_block = "${var.public-frontend-subnet-secondary}"
-  availability_zone = "${data.aws_availability_zones.available.names[1]}"
+  availability_zone = ["${data.aws_availability_zones.available.names[0]}", "${data.aws_availability_zones.available.names[1]}"]
   create_vpc = "${var.create_vpc}"
   env        = "${var.env}"
 }
@@ -52,7 +54,8 @@ module "private-app-subnet" {
   source     = "modules/network/subnet/"
   name       = "core-network-vpc-app-privatesubnet"
   vpc_id     = "${module.core-network-vpc.id}"
-  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  subnet_count = 2
+  availability_zone = ["${data.aws_availability_zones.available.names[0]}", "${data.aws_availability_zones.available.names[1]}"]
   cidr_block = "${var.private-app-subnet}"
   create_vpc = "${var.create_vpc}"
   env        = "${var.env}"
@@ -63,7 +66,8 @@ module "private-db-subnet" {
   source     = "modules/network/subnet/"
   name       = "core-network-vpc-db-privatesubnet"
   vpc_id     = "${module.core-network-vpc.id}"
-  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  subnet_count = 2
+  availability_zone = ["${data.aws_availability_zones.available.names[0]}", "${data.aws_availability_zones.available.names[1]}"]
   cidr_block = "${var.private-db-subnet}"
   create_vpc = "${var.create_vpc}"
   env        = "${var.env}"
@@ -195,6 +199,11 @@ module "beanstalk-role" {
   source = "modules/security/"
   role_name = "aws-elasticbeanstalk-service-role"
 }
+
+/*module "rds" {
+  source = "modules/database/rds/"
+
+}*/
 
 module "paas-elasticbeanstalk" {
   source = "modules/paas/"

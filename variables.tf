@@ -14,19 +14,19 @@ variable "cidr" {
 }
 
 variable "public-frontend-subnet-primary" {
-  default = "10.0.1.0/24"
+  default = ["10.0.1.0/24", "10.0.2.0/24"]
 }
 
 variable "public-frontend-subnet-secondary" {
-  default = "10.0.2.0/24"
+  default = ["10.0.3.0/24", "10.0.4.0/24"]
 }
 
 variable "private-app-subnet" {
-  default = "10.0.3.0/24"
+  default = ["10.0.5.0/24", "10.0.6.0/24"]
 }
 
 variable "private-db-subnet" {
-  default = "10.0.4.0/24"
+  default = ["10.0.7.0/24", "10.0.8.0/24"]
 }
 
 variable "create_vpc" {
